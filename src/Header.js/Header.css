@@ -1,0 +1,13 @@
+.header {
+  height: 50px;
+  padding: 1rem;
+  background-color: #00a5e4;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__getLatestOrder {
+  background-color: #494a4c !important;
+}
