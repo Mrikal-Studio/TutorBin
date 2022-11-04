@@ -4,22 +4,24 @@ import { BASE_URL } from "../api";
 import Header from "../Header.js";
 import "./ChooseFiles.css";
 
-function ChooseFiles({ handleSelectInstanceFile }) {
+function ChooseFiles({ handleSelectInstanceFile, setSelectedFileData }) {
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
 
   const handleFile = (file) => {
     // handleSelectInstanceFile(file.fileUrl);
     setSelectedFile(file._id);
+    setSelectedFileData(file);
   };
 
   const getFiles = () => {
     axios
       .get(BASE_URL + "orders/")
       .then((res) => {
+        console.log(res?.data?.data, "1");
         setFiles(res?.data?.data);
-        console.log(res?.data?.data?.questions, "1");
         setSelectedFile(res?.data?.data?.questions[0]?._id);
+        setSelectedFileData(res?.data?.data?.questions[0]);
       })
       .catch((err) => console.log(err));
   };

@@ -25,7 +25,7 @@ function FigModal({ open, handleClose, selectedFig }) {
       <Box sx={style}>
         <Stack spacing={2}>
           <img src={selectedFig?.imageURI} alt="preview__image" />
-          <FormControl>
+          {/* <FormControl>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Question Type
             </FormLabel>
@@ -47,7 +47,7 @@ function FigModal({ open, handleClose, selectedFig }) {
                 label="other"
               />
             </RadioGroup>
-          </FormControl>
+          </FormControl> */}
         </Stack>
       </Box>
     </Modal>
