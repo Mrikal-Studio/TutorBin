@@ -39,6 +39,12 @@ function ChooseFiles({
     if (file.hasOwnProperty("status")) {
       if (file?.status === "completed") {
         return "#4BB543";
+      } else {
+        if (selectedFile === file?._id) {
+          return "#00A5E4";
+        } else {
+          return "white";
+        }
       }
     } else {
       if (selectedFile === file?._id) {
@@ -54,7 +60,11 @@ function ChooseFiles({
       if (file?.status === "completed") {
         return "#fff";
       } else {
-        return "#4BB543";
+        if (selectedFile === file?._id) {
+          return "white";
+        } else {
+          return "#00A5E4";
+        }
       }
     } else {
       if (selectedFile === file?._id) {

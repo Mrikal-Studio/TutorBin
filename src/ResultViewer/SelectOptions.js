@@ -15,7 +15,12 @@ import {
   InputLabel,
 } from "@mui/material";
 
-function SelectOptions({ setSelectedOptions, selectedOptions }) {
+function SelectOptions({
+  setSelectedOptions,
+  selectedOptions,
+  priceModelData,
+}) {
+  console.log(selectedOptions, "selectedOptions==========");
   const handleTypeChange = (e) => {
     setSelectedOptions({ ...selectedOptions, type: e.target.value });
   };
@@ -35,6 +40,8 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
               label="Type"
               className="selectOptions__dropdown"
               onChange={handleTypeChange}
+              value={selectedOptions?.type}
+              disabled={selectedOptions?.dataFromPriceModel}
             >
               {QUESTION_TYPE?.map((data, idx) => (
                 <MenuItem value={data} key={idx}>
@@ -51,6 +58,8 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
               label="Difficulty"
               className="selectOptions__dropdown"
               onChange={handleDifficultyChange}
+              value={selectedOptions?.difficulty}
+              disabled={selectedOptions?.dataFromPriceModel}
             >
               {QUESTION_DIFFICULTY?.map((data, idx) => (
                 <MenuItem value={data} key={idx}>
@@ -67,6 +76,8 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
               label="Category"
               className="selectOptions__dropdown"
               onChange={handleCategoryChange}
+              value={selectedOptions?.category}
+              disabled={selectedOptions?.dataFromPriceModel}
             >
               {QUESTION_CATEGORY[selectedOptions.type]?.map((data, idx) => (
                 <MenuItem value={data} key={idx}>
@@ -83,6 +94,8 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
             name="text"
             className="questionContainer__review"
             placeholder="Please add instructions..."
+            value={selectedOptions?.instruction}
+            disabled={selectedOptions?.dataFromPriceModel}
             onChange={(e) =>
               setSelectedOptions({
                 ...selectedOptions,
