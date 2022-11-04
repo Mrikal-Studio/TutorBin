@@ -8,7 +8,7 @@
 }
 .resultViewer__top {
   padding: 1rem;
-  overflow-y: auto;
+  overflow-y: auto !important;
   height: 100%;
 }
 .resultViewer__bottom {
@@ -84,9 +84,16 @@
 
 .resultviewer__finalAction {
   margin-top: 1rem;
+  margin-bottom: 3em;
   justify-content: flex-end;
 }
 
 .selectOptions__dropdown {
   width: 100%;
+}
+
+.selectOptions__date {
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #ccc;
 }

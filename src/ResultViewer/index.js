@@ -10,9 +10,8 @@ import { Stack } from "@mui/system";
 import FigModal from "./FigModal";
 import SelectOptions from "./SelectOptions";
 
-function ResultViewer() {
+function ResultViewer({ orderFile, selectedFileData }) {
   const inputRef = useRef(null);
-  const id = useId();
   const [open, setOpen] = useState(false);
   const [figModalOpen, setFigModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
@@ -22,13 +21,18 @@ function ResultViewer() {
   const [loading, setLoading] = useState(false);
   const [figsList, setFigsList] = useState([]);
   const [selectedFig, setSelectedFig] = useState(null);
+  const [text, setText] = useState("");
   const [selectedOptions, setSelectedOptions] = useState({
     type: "",
     difficulty: "",
     category: "",
+    instruction: "",
+    deadline: "",
+    lastQuestion: false,
   });
+  const [imgURLList, setImgURLList] = useState([]);
 
-  console.log(id, "ghjhgfghjhghjhghjh");
+  console.log(orderFile, "files, selectedFileData");
 
   const handleOpen = () => setOpen(true);
   const handleClose = (event, reason) => {
@@ -96,19 +100,20 @@ function ResultViewer() {
     let formData = new FormData();
     formData.append("file", OCRImage);
 
-    // axios
-    //   .post(BASE_URL + "output/photo-url", formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //     },
-    //   })
-    //   .then((res) => {
-    // console.log(res);
-    setSnackOpen(true);
-    setOpen(false);
-    setOCROutputData("");
-    //   })
-    //   .catch((err) => console.log(err));
+    axios
+      .post(BASE_URL + "output/photo-url", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setImgURLList([...imgURLList, res.data.data]);
+        setSnackOpen(true);
+        setOpen(false);
+        setOCROutputData("");
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -121,6 +126,29 @@ function ResultViewer() {
       handleOpen();
     });
   }, []);
+
+  const handleSaveQuestionData = () => {
+    const record = {
+      text: text,
+      image: imgURLList,
+      type: selectedOptions.type,
+      category: selectedOptions.category,
+      instruction: selectedOptions.instruction,
+      lastQuestion: selectedOptions.lastQuestion,
+      deadline: selectedOptions.deadline,
+      orderId: "6331f87a98aa84e199373f56",
+      incrementalId: selectedFileData?.incrementalId,
+      questionNumber: 1,
+    };
+
+    axios
+      .post(BASE_URL + "question-meta-data", record)
+      .then((res) => {
+        console.log(res);
+        setSnackOpen(true);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <div className="resultViewer">
@@ -157,10 +185,11 @@ function ResultViewer() {
       <Card className="resultViewer__top">
         <p>Paste selected text below</p>
         <textarea
-          id="review"
-          name="review"
+          id="text"
+          name="text"
           className="questionContainer__review"
           placeholder="You can paste here and view your text..."
+          onChange={(e) => setText(e.target.value)}
         ></textarea>
         <div className="resultViewer__figsList">
           {figsList.map((fig) => (
@@ -198,7 +227,11 @@ function ResultViewer() {
           <Button variant="contained" className="resultViewer__save">
             Back
           </Button>
-          <Button variant="contained" className="resultViewer__save">
+          <Button
+            variant="contained"
+            className="resultViewer__save"
+            onClick={handleSaveQuestionData}
+          >
             Save
           </Button>
           <Button variant="contained" className="resultViewer__save">
