@@ -3,7 +3,11 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { QUESTION_TYPE } from "../utils/dropDownData";
+import {
+  QUESTION_CATEGORY,
+  QUESTION_DIFFICULTY,
+  QUESTION_TYPE,
+} from "../utils/dropDownData";
 
 function SelectOptions() {
   return (
@@ -18,9 +22,24 @@ function SelectOptions() {
             ))}
           </Select>
         </Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={8}></Grid>
+        <Grid item xs={6}>
+          <Select label="Difficulty" className="selectOptions__dropdown">
+            {QUESTION_DIFFICULTY?.map((data, idx) => (
+              <MenuItem value={data} key={idx}>
+                {data}
+              </MenuItem>
+            ))}
+          </Select>
+        </Grid>
+        {/* <Grid item xs={8}>
+          <Select label="Category" className="selectOptions__dropdown">
+            {QUESTION_CATEGORY?.map((data, idx) => (
+              <MenuItem value={data} key={idx}>
+                {data}
+              </MenuItem>
+            ))}
+          </Select>
+        </Grid> */}
       </Grid>
     </Box>
   );
