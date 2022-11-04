@@ -15,7 +15,7 @@ function App() {
     viewerInstance.UI.loadDocument(file);
   };
 
-  console.log(files, "heyyyooooooooooooo")
+  console.log(files, "heyyyooooooooooooo");
 
   return (
     <div className="app">
@@ -24,9 +24,10 @@ function App() {
         files={files}
         setFiles={setFiles}
         setSelectedFileData={setSelectedFileData}
+        selectedFileData={selectedFileData}
       />
       <div className="container">
-        <PDFViewer setViewerInstance={setViewerInstance}/>
+        <PDFViewer setViewerInstance={setViewerInstance} />
         <ResultViewer orderFile={files} selectedFileData={selectedFileData} />
       </div>
     </div>
