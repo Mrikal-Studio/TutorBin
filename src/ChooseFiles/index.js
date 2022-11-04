@@ -9,7 +9,7 @@ function ChooseFiles({ handleSelectInstanceFile }) {
   const [selectedFile, setSelectedFile] = useState();
 
   const handleFile = (file) => {
-    handleSelectInstanceFile(file.fileUrl);
+    // handleSelectInstanceFile(file.fileUrl);
     setSelectedFile(file._id);
   };
 
@@ -44,7 +44,7 @@ function ChooseFiles({ handleSelectInstanceFile }) {
   return (
     <>
       <Header selectedOrderId={files?.incrementalId} getFiles={getFiles} />
-      <div className="chooseFiles">
+      {/* <div className="chooseFiles">
         {files?.questions?.map((file) => (
           <span
             className="file"
@@ -60,7 +60,7 @@ function ChooseFiles({ handleSelectInstanceFile }) {
             {file.fileName}
           </span>
         ))}
-      </div>
+      </div> */}
     </>
   );
 }
