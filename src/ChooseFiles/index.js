@@ -1,15 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../api";
+import ModalNew from "../Components/Modal";
 import Header from "../Header.js";
 import "./ChooseFiles.css";
 
 function ChooseFiles({ handleSelectInstanceFile, setSelectedFileData }) {
   const [files, setFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
-  const [searchOrder, setsearchOrder] = useState()
-  
-
+  const [searchOrder, setsearchOrder] = useState();
 
   const handleFile = (file) => {
     handleSelectInstanceFile(file.fileUrl);
@@ -29,21 +28,21 @@ function ChooseFiles({ handleSelectInstanceFile, setSelectedFileData }) {
       .catch((err) => console.log(err));
   };
 
-  console.log('searchOrder', searchOrder)
+  console.log("searchOrder", searchOrder);
 
-  const searchById = ()=>{
+  const searchById = () => {
     axios
-    .get(BASE_URL + `orders/?order_id=${searchOrder}`)
-    .then((res) => {
-      console.log('res of the order by ID',res);
-      setFiles(res?.data?.data);
+      .get(BASE_URL + `orders/?order_id=${searchOrder}`)
+      .then((res) => {
+        console.log("res of the order by ID", res);
+        setFiles(res?.data?.data);
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
-        setsearchOrder()
-      // set(true);
-    })
-    .catch((err) => console.log(err));
-  }
+        setsearchOrder();
+        // set(true);
+      })
+      .catch((err) => console.log(err));
+  };
 
   useEffect(() => {
     getFiles();
@@ -64,7 +63,13 @@ function ChooseFiles({ handleSelectInstanceFile, setSelectedFileData }) {
 
   return (
     <>
-      <Header selectedOrderId={files?.incrementalId} getFiles={getFiles} setsearchOrder={setsearchOrder} searchById={searchById}/>
+      <Header
+        selectedOrderId={files?.incrementalId}
+        getFiles={getFiles}
+        setsearchOrder={setsearchOrder}
+        searchById={searchById}
+      />
+      <ModalNew selectedOrderId={files?._id} />
       <div className="chooseFiles">
         {files?.questions?.map((file) => (
           <span

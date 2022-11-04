@@ -12,6 +12,7 @@ export const QUESTION_DIFFICULTY = [
   "veryDifficult",
   "extremelyDifficult",
 ];
+export const ASSIGNMENT_TYPE = ["assignment", "session"];
 export const QUESTION_CATEGORY = {
   numerical: [
     "fillInTheBlanks",
