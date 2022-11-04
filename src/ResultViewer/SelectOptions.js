@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import moment from "moment";
 import {
   QUESTION_CATEGORY,
   QUESTION_DIFFICULTY,
@@ -25,6 +26,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
   const handleCategoryChange = (e) => {
     setSelectedOptions({ ...selectedOptions, category: e.target.value });
   };
+  console.log("new component",selectedOptions)
   return (
     <Box sx={{ flexGrow: 1, marginTop: "2rem" }}>
       <Grid container spacing={2}>
@@ -35,9 +37,10 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
               label="Type"
               className="selectOptions__dropdown"
               onChange={handleTypeChange}
+              value={selectedOptions?.type}
             >
               {QUESTION_TYPE?.map((data, idx) => (
-                <MenuItem value={data} key={idx}>
+                <MenuItem value={data} key={idx} defaultValue="essay">
                   {data}
                 </MenuItem>
               ))}
@@ -51,6 +54,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
               label="Difficulty"
               className="selectOptions__dropdown"
               onChange={handleDifficultyChange}
+              value = {selectedOptions?.difficulty}
             >
               {QUESTION_DIFFICULTY?.map((data, idx) => (
                 <MenuItem value={data} key={idx}>
@@ -67,6 +71,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
               label="Category"
               className="selectOptions__dropdown"
               onChange={handleCategoryChange}
+              value = {selectedOptions?.category}
             >
               {QUESTION_CATEGORY[selectedOptions.type]?.map((data, idx) => (
                 <MenuItem value={data} key={idx}>
@@ -83,6 +88,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
             name="text"
             className="questionContainer__review"
             placeholder="Please add instructions..."
+            value={selectedOptions?.instruction}
             onChange={(e) =>
               setSelectedOptions({
                 ...selectedOptions,
@@ -99,6 +105,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
             name="deadline"
             min="2022-09-01"
             className="selectOptions__date"
+            value={selectedOptions? moment(selectedOptions?.deadline).format("YYYY-MM-DD"):"2000-08-18"}
             onChange={(e) =>
               setSelectedOptions({
                 ...selectedOptions,
@@ -111,6 +118,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
           <FormControlLabel
             control={
               <Checkbox
+              value={selectedOptions?.lastQuestion ? selectedOptions?.lastQuestion : false}
                 onChange={(e) =>
                   setSelectedOptions({
                     ...selectedOptions,
