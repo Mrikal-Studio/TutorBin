@@ -17,10 +17,9 @@ function ChooseFiles({ handleSelectInstanceFile }) {
     axios
       .get(BASE_URL + "orders/")
       .then((res) => {
-        console.log(res.data.data, "1");
-        setFiles(res.data.data);
-        setSelectedFile(res.data.questins[0]._id);
-        console.log(res.data.data.deadline, "popopopopo");
+        setFiles(res?.data?.data);
+        console.log(res?.data?.data?.questions, "1");
+        setSelectedFile(res?.data?.data?.questions[0]?._id);
       })
       .catch((err) => console.log(err));
   };
