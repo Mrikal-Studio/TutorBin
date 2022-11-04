@@ -24,7 +24,7 @@ function FigModal({ open, handleClose, selectedFig }) {
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <Stack spacing={2}>
-          <img src={selectedFig?.imageURI} alt="preview__image" />
+          <img src={selectedFig?.imageURI?selectedFig?.imageURI:selectedFig} alt="preview__image" />
           {/* <FormControl>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Question Type

@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import moment from "moment";
 import {
   QUESTION_CATEGORY,
   QUESTION_DIFFICULTY,
@@ -30,6 +31,7 @@ function SelectOptions({
   const handleCategoryChange = (e) => {
     setSelectedOptions({ ...selectedOptions, category: e.target.value });
   };
+  console.log("new component",selectedOptions)
   return (
     <Box sx={{ flexGrow: 1, marginTop: "2rem" }}>
       <Grid container spacing={2}>
@@ -44,7 +46,7 @@ function SelectOptions({
               disabled={selectedOptions?.dataFromPriceModel}
             >
               {QUESTION_TYPE?.map((data, idx) => (
-                <MenuItem value={data} key={idx}>
+                <MenuItem value={data} key={idx} defaultValue="essay">
                   {data}
                 </MenuItem>
               ))}
@@ -112,6 +114,7 @@ function SelectOptions({
             name="deadline"
             min="2022-09-01"
             className="selectOptions__date"
+            value={selectedOptions? moment(selectedOptions?.deadline).format("YYYY-MM-DD"):"2000-08-18"}
             onChange={(e) =>
               setSelectedOptions({
                 ...selectedOptions,
@@ -124,6 +127,7 @@ function SelectOptions({
           <FormControlLabel
             control={
               <Checkbox
+              value={selectedOptions?.lastQuestion ? selectedOptions?.lastQuestion : false}
                 onChange={(e) =>
                   setSelectedOptions({
                     ...selectedOptions,
