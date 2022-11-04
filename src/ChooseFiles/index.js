@@ -4,8 +4,13 @@ import { BASE_URL } from "../api";
 import Header from "../Header.js";
 import "./ChooseFiles.css";
 
-function ChooseFiles({ handleSelectInstanceFile, setSelectedFileData }) {
-  const [files, setFiles] = useState([]);
+function ChooseFiles({
+  handleSelectInstanceFile,
+  setSelectedFileData,
+  selectedFileData,
+  setFiles,
+  files,
+}) {
   const [selectedFile, setSelectedFile] = useState();
 
   const handleFile = (file) => {
@@ -42,7 +47,7 @@ function ChooseFiles({ handleSelectInstanceFile, setSelectedFileData }) {
       return "#fb3836";
     }
   };
-
+  console.log(selectedFileData, "leloooooooooo");
   return (
     <>
       <Header selectedOrderId={files?.incrementalId} getFiles={getFiles} />

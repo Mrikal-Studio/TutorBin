@@ -9,6 +9,7 @@ import PermMediaIcon from "@mui/icons-material/PermMedia";
 import { Stack } from "@mui/system";
 import FigModal from "./FigModal";
 import SelectOptions from "./SelectOptions";
+import PriceModel from "./PriceModel";
 
 function ResultViewer({ orderFile, selectedFileData }) {
   const inputRef = useRef(null);
@@ -31,6 +32,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
     lastQuestion: false,
   });
   const [imgURLList, setImgURLList] = useState([]);
+  const [priceModelData, setPriceModelData] = useState({});
 
   console.log(orderFile, "files, selectedFileData");
 
@@ -135,10 +137,11 @@ function ResultViewer({ orderFile, selectedFileData }) {
       instruction: selectedOptions.instruction,
       lastQuestion: selectedOptions.lastQuestion,
       deadline: selectedOptions.deadline,
-      orderId: "6331f87a98aa84e199373f56",
+      orderId: orderFile._id,
       incrementalId: selectedFileData?.incrementalId,
       questionNumber: 1,
     };
+    console.log(record, "record");
 
     axios
       .post(BASE_URL + "question-meta-data", record)
@@ -148,6 +151,20 @@ function ResultViewer({ orderFile, selectedFileData }) {
       })
       .catch((err) => console.log(err));
   };
+
+  const getPriceModelData = () => {
+    axios
+      .post(BASE_URL + "pricemodel/63293d39a0e7afd2bf68f555")
+      .then((res) => {
+        console.log(res?.data?.data, "price model data");
+        setPriceModelData(res?.data?.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    getPriceModelData();
+  }, []);
 
   return (
     <div className="resultViewer">
@@ -190,6 +207,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
           placeholder="You can paste here and view your text..."
           onChange={(e) => setText(e.target.value)}
         ></textarea>
+        {/* <PriceModel priceModelData={setPriceModelData} /> */}
         <div className="resultViewer__figsList">
           {figsList.map((fig) => (
             <Stack spacing={1} alignItems="center">

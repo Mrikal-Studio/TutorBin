@@ -77,11 +77,12 @@ function SelectOptions({ setSelectedOptions, selectedOptions }) {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
+          <InputLabel id="demo-simple-select-label">Instructions</InputLabel>
           <textarea
             id="text"
             name="text"
             className="questionContainer__review"
-            placeholder="You can paste here and view your text..."
+            placeholder="Please add instructions..."
             onChange={(e) =>
               setSelectedOptions({
                 ...selectedOptions,
