@@ -26,7 +26,7 @@ function App() {
         setSelectedFileData={setSelectedFileData}
       />
       <div className="container">
-        <PDFViewer />
+        <PDFViewer setViewerInstance={setViewerInstance}/>
         <ResultViewer orderFile={files} selectedFileData={selectedFileData} />
       </div>
     </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import WebViewer from "@pdftron/pdfjs-express-viewer";
 import "./PDFViewer.css";
 
-function PDFViewer() {
+function PDFViewer({ setViewerInstance }) {
   const viewer = useRef(null);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ function PDFViewer() {
       .then((instance) => {
         // now you can access APIs through the WebViewer instance
         const { Core } = instance;
-        //   setViewerInstance(instance);
+        setViewerInstance(instance);
 
         instance.UI.setTheme("dark");
 
