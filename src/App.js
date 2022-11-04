@@ -9,14 +9,15 @@ function App() {
   const [viewerInstance, setViewerInstance] = useState();
 
   const handleSelectInstanceFile = (file) => {
-    viewerInstance.UI.loadDocument(file);
+    console.log(file, "hjiujhjikjhjikj fileee");
+    // viewerInstance.UI.loadDocument(file);
   };
 
   return (
     <div className="app">
       <ChooseFiles handleSelectInstanceFile={handleSelectInstanceFile} />
       <div className="container">
-        <PDFViewer setViewerInstance={setViewerInstance} />
+        <PDFViewer />
         <ResultViewer />
       </div>
     </div>
