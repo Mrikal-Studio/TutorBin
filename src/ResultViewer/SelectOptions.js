@@ -9,12 +9,25 @@ import {
   QUESTION_TYPE,
 } from "../utils/dropDownData";
 
-function SelectOptions() {
+function SelectOptions({ setSelectedOptions, selectedOptions }) {
+  const handleTypeChange = (e) => {
+    setSelectedOptions({ ...selectedOptions, type: e.target.value });
+  };
+  const handleDifficultyChange = (e) => {
+    setSelectedOptions({ ...selectedOptions, difficulty: e.target.value });
+  };
+  const handleCategoryChange = (e) => {
+    setSelectedOptions({ ...selectedOptions, category: e.target.value });
+  };
   return (
     <Box sx={{ flexGrow: 1, marginTop: "2rem" }}>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <Select label="Type" className="selectOptions__dropdown">
+          <Select
+            label="Type"
+            className="selectOptions__dropdown"
+            onChange={handleTypeChange}
+          >
             {QUESTION_TYPE?.map((data, idx) => (
               <MenuItem value={data} key={idx}>
                 {data}
@@ -23,7 +36,11 @@ function SelectOptions() {
           </Select>
         </Grid>
         <Grid item xs={6}>
-          <Select label="Difficulty" className="selectOptions__dropdown">
+          <Select
+            label="Difficulty"
+            className="selectOptions__dropdown"
+            onChange={handleDifficultyChange}
+          >
             {QUESTION_DIFFICULTY?.map((data, idx) => (
               <MenuItem value={data} key={idx}>
                 {data}
@@ -31,15 +48,19 @@ function SelectOptions() {
             ))}
           </Select>
         </Grid>
-        {/* <Grid item xs={8}>
-          <Select label="Category" className="selectOptions__dropdown">
-            {QUESTION_CATEGORY?.map((data, idx) => (
+        <Grid item xs={8}>
+          <Select
+            label="Category"
+            className="selectOptions__dropdown"
+            onChange={handleCategoryChange}
+          >
+            {QUESTION_CATEGORY[selectedOptions.type]?.map((data, idx) => (
               <MenuItem value={data} key={idx}>
                 {data}
               </MenuItem>
             ))}
           </Select>
-        </Grid> */}
+        </Grid>
       </Grid>
     </Box>
   );
