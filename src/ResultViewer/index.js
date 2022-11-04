@@ -1,6 +1,6 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import "./ResultViewer.css";
-import { Card, Snackbar } from "@mui/material";
+import { Button, Card, Snackbar } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import PreviewModal from "./PreviewModal";
 import axios from "axios";
@@ -8,6 +8,7 @@ import { BASE_URL } from "../api";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import { Stack } from "@mui/system";
 import FigModal from "./FigModal";
+import SelectOptions from "./SelectOptions";
 
 function ResultViewer() {
   const inputRef = useRef(null);
@@ -21,6 +22,7 @@ function ResultViewer() {
   const [loading, setLoading] = useState(false);
   const [figsList, setFigsList] = useState([]);
   const [selectedFig, setSelectedFig] = useState(null);
+  const [selectedOptions, setSelectedOptions] = useState({});
 
   console.log(id, "ghjhgfghjhghjhghjh");
 
@@ -179,6 +181,25 @@ function ResultViewer() {
             id={"document_attachment_doc"}
             className="custom__input"
           />
+        </Stack>
+        <SelectOptions
+          selectedOptions={selectedOptions}
+          setSelectedOptions={setSelectedOptions}
+        />
+        <Stack
+          spacing={2}
+          direction="row"
+          className="resultviewer__finalAction"
+        >
+          <Button variant="contained" className="resultViewer__save">
+            Back
+          </Button>
+          <Button variant="contained" className="resultViewer__save">
+            Save
+          </Button>
+          <Button variant="contained" className="resultViewer__save">
+            Skip
+          </Button>
         </Stack>
       </Card>
     </div>
