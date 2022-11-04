@@ -3,20 +3,19 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { QUESTION_TYPE } from "../utils/dropDownData";
 
 function SelectOptions() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, marginTop: "2rem" }}>
       <Grid container spacing={2}>
-        <Grid item xs={8}>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="Age"
-          >
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
+        <Grid item xs={6}>
+          <Select label="Type" className="selectOptions__dropdown">
+            {QUESTION_TYPE?.map((data, idx) => (
+              <MenuItem value={data} key={idx}>
+                {data}
+              </MenuItem>
+            ))}
           </Select>
         </Grid>
         <Grid item xs={4}></Grid>
