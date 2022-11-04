@@ -12,7 +12,7 @@ function App() {
 
   const handleSelectInstanceFile = (file) => {
     console.log(file, "hjiujhjikjhjikj fileee");
-    // viewerInstance.UI.loadDocument(file);
+    viewerInstance.UI.loadDocument(file);
   };
 
   console.log(files, "heyyyooooooooooooo")
