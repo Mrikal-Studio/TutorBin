@@ -12,6 +12,9 @@ function ChooseFiles({
   files,
 }) {
   const [selectedFile, setSelectedFile] = useState();
+  const [searchOrder, setsearchOrder] = useState()
+  
+
 
   const handleFile = (file) => {
     handleSelectInstanceFile(file.fileUrl);
@@ -30,6 +33,22 @@ function ChooseFiles({
       })
       .catch((err) => console.log(err));
   };
+
+  console.log('searchOrder', searchOrder)
+
+  const searchById = ()=>{
+    axios
+    .get(BASE_URL + `orders/?order_id=${searchOrder}`)
+    .then((res) => {
+      console.log('res of the order by ID',res);
+      setFiles(res?.data?.data);
+        setSelectedFile(res?.data?.data?.questions[0]?._id);
+        setSelectedFileData(res?.data?.data?.questions[0]);
+        setsearchOrder()
+      // set(true);
+    })
+    .catch((err) => console.log(err));
+  }
 
   useEffect(() => {
     getFiles();
@@ -50,7 +69,7 @@ function ChooseFiles({
   console.log(selectedFileData, "leloooooooooo");
   return (
     <>
-      <Header selectedOrderId={files?.incrementalId} getFiles={getFiles} />
+      <Header selectedOrderId={files?.incrementalId} getFiles={getFiles} setsearchOrder={setsearchOrder} searchById={searchById}/>
       <div className="chooseFiles">
         {files?.questions?.map((file) => (
           <span
