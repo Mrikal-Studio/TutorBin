@@ -81,3 +81,8 @@
 .resultViewer__figsIcon:hover {
   transform: scale(1.02);
 }
+
+.resultviewer__finalAction {
+  margin-top: 1rem;
+  justify-content: flex-end;
+}
