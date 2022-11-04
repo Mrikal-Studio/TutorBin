@@ -22,7 +22,11 @@ function ResultViewer() {
   const [loading, setLoading] = useState(false);
   const [figsList, setFigsList] = useState([]);
   const [selectedFig, setSelectedFig] = useState(null);
-  const [selectedOptions, setSelectedOptions] = useState({});
+  const [selectedOptions, setSelectedOptions] = useState({
+    type: "",
+    difficulty: "",
+    category: "",
+  });
 
   console.log(id, "ghjhgfghjhghjhghjh");
 

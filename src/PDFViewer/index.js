@@ -11,7 +11,7 @@ function PDFViewer({ setViewerInstance }) {
         path: "/webviewer",
         initialDoc:
           "https://mediatb.blob.core.windows.net/media/632ac8cba772337803404f86/questions/1.pdf",
-        licenseKey: "pOrU89d8CRDr6hfQq6es",
+        licenseKey: "OKh7m5JEGNKsvXsgd2vR",
       },
       viewer.current
     ).then((instance) => {
