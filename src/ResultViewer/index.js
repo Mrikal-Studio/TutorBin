@@ -30,11 +30,12 @@ function ResultViewer({ orderFile, selectedFileData }) {
     instruction: "",
     deadline: "",
     lastQuestion: false,
+    dataFromPriceModel: false,
   });
   const [imgURLList, setImgURLList] = useState([]);
   const [priceModelData, setPriceModelData] = useState({});
 
-  console.log(orderFile, "files, selectedFileData");
+  console.log(orderFile, "orderFile");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -154,10 +155,23 @@ function ResultViewer({ orderFile, selectedFileData }) {
 
   const getPriceModelData = () => {
     axios
-      .post(BASE_URL + "pricemodel/63293d39a0e7afd2bf68f555")
+      .post(BASE_URL + "pricemodel/" + "63293d39a0e7afd2bf68f555")
       .then((res) => {
         console.log(res?.data?.data, "price model data");
         setPriceModelData(res?.data?.data);
+        setSelectedOptions({
+          ...selectedOptions,
+          type:
+            priceModelData &&
+            priceModelData?.questionProperties[1]?.questionType,
+          difficulty:
+            priceModelData && priceModelData?.questionProperties[1]?.difficulty,
+          category:
+            priceModelData &&
+            priceModelData?.questionProperties[1]?.questiondivision,
+          instruction: priceModelData && priceModelData?.comment,
+          dataFromPriceModel: true,
+        });
       })
       .catch((err) => console.log(err));
   };
@@ -207,7 +221,6 @@ function ResultViewer({ orderFile, selectedFileData }) {
           placeholder="You can paste here and view your text..."
           onChange={(e) => setText(e.target.value)}
         ></textarea>
-        {/* <PriceModel priceModelData={setPriceModelData} /> */}
         <div className="resultViewer__figsList">
           {figsList.map((fig) => (
             <Stack spacing={1} alignItems="center">
@@ -235,6 +248,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
         <SelectOptions
           selectedOptions={selectedOptions}
           setSelectedOptions={setSelectedOptions}
+          priceModelData={priceModelData}
         />
         <Stack
           spacing={2}
