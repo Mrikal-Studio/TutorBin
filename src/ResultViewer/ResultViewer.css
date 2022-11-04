@@ -86,3 +86,7 @@
   margin-top: 1rem;
   justify-content: flex-end;
 }
+
+.selectOptions__dropdown {
+  width: 100%;
+}
