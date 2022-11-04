@@ -1,10 +1,14 @@
-import { Alert, Button, Snackbar, Stack } from "@mui/material";
+import { Alert, Button, IconButton, InputAdornment, Snackbar, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import { BASE_URL } from "../api";
 import "./Header.css";
+import SearchIcon from '@mui/icons-material/Search';
+import TextField from '@mui/material/TextField';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
-function Header({ selectedOrderId, getFiles }) {
+
+function Header({ selectedOrderId, getFiles,  setsearchOrder, searchById}) {
   const [snackOpen, setSnackOpen] = useState(false);
 
   const handleSnackClose = (event, reason) => {
@@ -67,6 +71,22 @@ function Header({ selectedOrderId, getFiles }) {
         >
           Complete Order
         </Button>
+        <OutlinedInput
+            id="outlined-adornment-password"
+            type={'text'}
+            onChange={(e)=>setsearchOrder(e.target.value)}
+            className="searchBar"
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  edge="end"
+                >
+                  <SearchIcon onClick={searchById}/>
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Search Order"
+          />
       </Stack>
     </div>
   );
