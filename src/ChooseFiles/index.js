@@ -35,33 +35,59 @@ function ChooseFiles({
     getFiles();
   }, []);
 
-  // Color for selected files
-  const getColor = (status) => {
-    if (status === "pending") {
-      return "lightgrey";
-    }
-    if (status === "ongoing") {
-      return "#16ad5b";
-    }
-    if (status === "completed") {
-      return "#fb3836";
+  const getBackground = (file) => {
+    if (file.hasOwnProperty("status")) {
+      if (file?.status === "completed") {
+        return "#4BB543";
+      }
+    } else {
+      if (selectedFile === file?._id) {
+        return "#00A5E4";
+      } else {
+        return "white";
+      }
     }
   };
-  console.log(selectedFileData, "leloooooooooo");
+
+  const getColor = (file) => {
+    if (file.hasOwnProperty("status")) {
+      if (file?.status === "completed") {
+        return "#fff";
+      } else {
+        return "#4BB543";
+      }
+    } else {
+      if (selectedFile === file?._id) {
+        return "white";
+      } else {
+        return "#00A5E4";
+      }
+    }
+  };
+
   return (
     <>
       <Header selectedOrderId={files?.incrementalId} getFiles={getFiles} />
       <div className="chooseFiles">
         {files?.questions?.map((file) => (
           <span
+            disabled
             className="file"
             id="file"
             key={file._id}
-            onClick={() => handleFile(file)}
+            onClick={() => {
+              if (file?.status === "completed") {
+                return;
+              }
+              handleFile(file);
+            }}
             style={{
-              border: "1.2px solid #1C84FF",
-              background: selectedFile === file._id ? "#1C84FF" : "white",
-              color: selectedFile === file._id ? "white" : "#1C84FF",
+              border:
+                file?.status === "completed"
+                  ? "1.2px solid #4BB543"
+                  : "1.2px solid #1C84FF",
+              background: getBackground(file),
+              color: getColor(file),
             }}
           >
             {file.fileName}
