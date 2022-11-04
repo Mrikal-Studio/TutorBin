@@ -35,8 +35,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
   console.log(orderFile, "files, selectedFileData");
 
   const handleOpen = () => setOpen(true);
-  const handleClose = (event, reason) => {
-    if (reason && reason == "backdropClick") return;
+  const handleClose = () => {
     setOpen(false);
   };
 
