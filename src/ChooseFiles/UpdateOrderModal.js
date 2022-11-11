@@ -2,7 +2,14 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { InputLabel, Stack } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  InputLabel,
+  Snackbar,
+  Stack,
+  TextField,
+} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -10,6 +17,7 @@ import axios from "axios";
 import { BASE_URL } from "../api";
 import { QUESTION_TYPE } from "../utils/dropDownData";
 import { useState } from "react";
+import { useEffect } from "react";
 
 const style = {
   position: "absolute",
@@ -23,13 +31,18 @@ const style = {
   p: 4,
 };
 
-export default function UpdateOrderModal({ selectedOrderId, subjectId }) {
-  const [open, setOpen] = useState(true);
+export default function UpdateOrderModal({
+  selectedOrderId,
+  subjectId,
+  handleClose,
+  handleOpen,
+  open,
+}) {
   const [type, setType] = useState("");
   const [Subject, setSubject] = useState("");
   const [Date, setDate] = useState();
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [subjectData, setSubjectData] = useState([]);
+  const [snackOpen, setSnackOpen] = useState(false);
 
   const handleChange = (event) => {
     setType(event.target.value);
@@ -40,31 +53,72 @@ export default function UpdateOrderModal({ selectedOrderId, subjectId }) {
 
   const UpdateData = () => {};
 
-  const saveModalData = () => {
-    console.log("type", type);
-    console.log("Subject", Subject);
-    console.log("Date", Date);
+  const getSubjectData = (params = "ana") => {
+    setSubject(params);
+    let tempdata = [];
+    axios
+      .get(BASE_URL + `subjects?search=${params}&page=1&limit=5`)
+      .then((res) => {
+        console.log(res?.data?.data, "subject get");
+        res?.data?.data?.map((subject) =>
+          tempdata.push({
+            label: subject?.name,
+          })
+        );
+        setSubjectData(tempdata);
+      })
+      .catch((err) => console.log(err));
+  };
 
+  useEffect(() => {
+    getSubjectData();
+  }, []);
+
+  console.log(Subject, "subject");
+
+  const saveModalData = () => {
     const body = {
       type: type,
       deadline: Date,
       subject: {
         id: subjectId,
-        name: Subject,
+        name: Subject?.label,
       },
     };
     axios
       .put(BASE_URL + "orders/" + selectedOrderId, body)
       .then((res) => {
         console.log(res, "update wala order bey");
-        // setSnackOpen(true);
+        handleClose();
+        setSnackOpen(true);
       })
       .catch((err) => console.log(err));
   };
 
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackOpen(false);
+  };
+
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Snackbar
+        open={snackOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Saved Successfully!!!
+        </Alert>
+      </Snackbar>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <p className="title">Update Order Info</p>
@@ -86,13 +140,18 @@ export default function UpdateOrderModal({ selectedOrderId, subjectId }) {
                 ))}
               </Select>
             </FormControl>
-            <FormControl fullWidth>
-              <InputLabel>Subject</InputLabel>
-              <Select value={Subject} label="Subject" onChange={handleSubject}>
-                <MenuItem value={"assignment"}>assignment</MenuItem>
-                <MenuItem value={"session"}>session</MenuItem>
-              </Select>
-            </FormControl>
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={subjectData}
+              onChange={(event, newValue) => {
+                setSubject(newValue);
+              }}
+              onInputChange={(e) => getSubjectData(e.target.value)}
+              renderInput={(params) => (
+                <TextField {...params} label="Subject" />
+              )}
+            />
           </Stack>
           <Stack
             spacing={2}
