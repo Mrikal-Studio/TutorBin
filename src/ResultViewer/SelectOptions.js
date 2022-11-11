@@ -16,12 +16,7 @@ import {
   InputLabel,
 } from "@mui/material";
 
-function SelectOptions({
-  setSelectedOptions,
-  selectedOptions,
-  priceModelData,
-}) {
-  console.log(selectedOptions, "selectedOptions==========");
+function SelectOptions({ setSelectedOptions, selectedOptions }) {
   const handleTypeChange = (e) => {
     setSelectedOptions({ ...selectedOptions, type: e.target.value });
   };
@@ -43,7 +38,6 @@ function SelectOptions({
               className="selectOptions__dropdown"
               onChange={handleTypeChange}
               value={selectedOptions?.type}
-              disabled={selectedOptions?.dataFromPriceModel}
             >
               {QUESTION_TYPE?.map((data, idx) => (
                 <MenuItem value={data} key={idx} defaultValue="essay">
@@ -60,8 +54,7 @@ function SelectOptions({
               label="Difficulty"
               className="selectOptions__dropdown"
               onChange={handleDifficultyChange}
-              value={selectedOptions?.difficulty}
-              disabled={selectedOptions?.dataFromPriceModel}
+              value = {selectedOptions?.difficulty}
             >
               {QUESTION_DIFFICULTY?.map((data, idx) => (
                 <MenuItem value={data} key={idx}>
@@ -78,8 +71,7 @@ function SelectOptions({
               label="Category"
               className="selectOptions__dropdown"
               onChange={handleCategoryChange}
-              value={selectedOptions?.category}
-              disabled={selectedOptions?.dataFromPriceModel}
+              value = {selectedOptions?.category}
             >
               {QUESTION_CATEGORY[selectedOptions.type]?.map((data, idx) => (
                 <MenuItem value={data} key={idx}>
@@ -97,7 +89,6 @@ function SelectOptions({
             className="questionContainer__review"
             placeholder="Please add instructions..."
             value={selectedOptions?.instruction}
-            disabled={selectedOptions?.dataFromPriceModel}
             onChange={(e) =>
               setSelectedOptions({
                 ...selectedOptions,

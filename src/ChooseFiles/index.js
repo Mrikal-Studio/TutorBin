@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../api";
 import Header from "../Header.js";
 import "./ChooseFiles.css";
-import UpdateOrderModal from "./UpdateOrderModal";
 
 function ChooseFiles({
   handleSelectInstanceFile,
@@ -13,11 +12,9 @@ function ChooseFiles({
   files,
 }) {
   const [selectedFile, setSelectedFile] = useState();
-  const [searchOrder, setsearchOrder] = useState();
-  const [open, setOpen] = useState(true);
+  const [searchOrder, setsearchOrder] = useState()
+  
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   const handleFile = (file) => {
     handleSelectInstanceFile(file.fileUrl);
@@ -33,111 +30,57 @@ function ChooseFiles({
         setFiles(res?.data?.data);
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
-        if (res?.data?.data?.questions.length > 0) {
-          handleOpen();
-        }
       })
       .catch((err) => console.log(err));
   };
 
-  console.log("searchOrder", searchOrder);
+  console.log('searchOrder', searchOrder)
 
-  const searchById = () => {
+  const searchById = ()=>{
     axios
-      .get(BASE_URL + `orders/?order_id=${searchOrder}`)
-      .then((res) => {
-        console.log("res of the order by ID", res);
-        setFiles(res?.data?.data);
+    .get(BASE_URL + `orders/?order_id=${searchOrder}`)
+    .then((res) => {
+      console.log('res of the order by ID',res);
+      setFiles(res?.data?.data);
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
-        setsearchOrder();
-        if (res?.data?.data?.questions.length > 0) {
-          handleOpen();
-        }
-        // set(true);
-      })
-      .catch((err) => console.log(err));
-  };
+        setsearchOrder()
+      // set(true);
+    })
+    .catch((err) => console.log(err));
+  }
 
   useEffect(() => {
     getFiles();
   }, []);
 
-  const getBackground = (file) => {
-    if (file.hasOwnProperty("status")) {
-      if (file?.status === "completed") {
-        return "#4BB543";
-      } else {
-        if (selectedFile === file?._id) {
-          return "#00A5E4";
-        } else {
-          return "white";
-        }
-      }
-    } else {
-      if (selectedFile === file?._id) {
-        return "#00A5E4";
-      } else {
-        return "white";
-      }
+  // Color for selected files
+  const getColor = (status) => {
+    if (status === "pending") {
+      return "lightgrey";
+    }
+    if (status === "ongoing") {
+      return "#16ad5b";
+    }
+    if (status === "completed") {
+      return "#fb3836";
     }
   };
-
-  const getColor = (file) => {
-    if (file.hasOwnProperty("status")) {
-      if (file?.status === "completed") {
-        return "#fff";
-      } else {
-        if (selectedFile === file?._id) {
-          return "white";
-        } else {
-          return "#00A5E4";
-        }
-      }
-    } else {
-      if (selectedFile === file?._id) {
-        return "white";
-      } else {
-        return "#00A5E4";
-      }
-    }
-  };
-
+  console.log(selectedFileData, "leloooooooooo");
   return (
     <>
-      <Header
-        selectedOrderId={files?.incrementalId}
-        getFiles={getFiles}
-        setsearchOrder={setsearchOrder}
-        searchById={searchById}
-      />
-      <UpdateOrderModal
-        selectedOrderId={files?._id}
-        subjectId={files?.subject?.id}
-        handleClose={handleClose}
-        handleOpen={handleOpen}
-        open={open}
-      />
+      <Header selectedOrderId={files?.incrementalId} getFiles={getFiles} setsearchOrder={setsearchOrder} searchById={searchById}/>
       <div className="chooseFiles">
         {files?.questions?.map((file) => (
           <span
-            disabled
             className="file"
             id="file"
             key={file._id}
-            onClick={() => {
-              if (file?.status === "completed") {
-                return;
-              }
-              handleFile(file);
-            }}
+            onClick={() => handleFile(file)}
             style={{
-              border:
-                file?.status === "completed"
-                  ? "1.2px solid #4BB543"
-                  : "1.2px solid #1C84FF",
-              background: getBackground(file),
-              color: getColor(file),
+              border: "1.2px solid #1C84FF",
+              background: selectedFile === file._id ? "#1C84FF" : "white",
+              color: selectedFile === file._id ? "white" : "#1C84FF",
             }}
           >
             {file.fileName}
