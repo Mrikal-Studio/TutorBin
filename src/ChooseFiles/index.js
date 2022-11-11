@@ -42,7 +42,7 @@ function ChooseFiles({
 
   console.log("searchOrder", searchOrder);
 
-  const searchById = () => {
+  useEffect(()=>{
     axios
       .get(BASE_URL + `orders/?order_id=${searchOrder}`)
       .then((res) => {
@@ -51,13 +51,12 @@ function ChooseFiles({
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
         setsearchOrder();
-        if (res?.data?.data?.questions.length > 0) {
-          handleOpen();
-        }
-        // set(true);
       })
       .catch((err) => console.log(err));
-  };
+
+  },[searchOrder]);
+
+
 
   useEffect(() => {
     getFiles();
@@ -103,13 +102,24 @@ function ChooseFiles({
     }
   };
 
+  useEffect(()=>{
+    const urlParams = new URLSearchParams(window.location.search);
+    const order_id = urlParams.get('order_id');
+
+    console.log("order_id ghiuhuihiuhiu",order_id)
+    if(order_id){
+    setsearchOrder(order_id)
+   // searchById(order_id)
+    }
+  },[])
+
+
   return (
     <>
       <Header
         selectedOrderId={files?.incrementalId}
         getFiles={getFiles}
         setsearchOrder={setsearchOrder}
-        searchById={searchById}
       />
       <UpdateOrderModal
         selectedOrderId={files?._id}
