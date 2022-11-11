@@ -175,6 +175,12 @@ function ResultViewer({ orderFile, selectedFileData }) {
     //api to get all the saved questions by orderid
   }, []);
 
+  const resetStateHandler = () => {
+    setText({question: "", solution: "" })
+    setSelectedOptions({ type: "", difficulty: "", category: "",instruction: "",deadline: "",lastQuestion: false,dataFromPriceModel: false})
+    setPreviewImage(null)
+    setOCRImage(null)
+  }
   const handleSaveQuestionData = () => {
     const record = {
       text: text.question,
@@ -199,6 +205,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
       .then((res) => {
         console.log(res);
         setSnackOpen(true);
+        resetStateHandler()
       })
       .catch((err) => console.log(err));
   };
