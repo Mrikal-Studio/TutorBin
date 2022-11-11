@@ -8,8 +8,9 @@ import TextField from '@mui/material/TextField';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
 
-function Header({ selectedOrderId, getFiles,  setsearchOrder, searchById}) {
+function Header({ selectedOrderId, getFiles,  setsearchOrder}) {
   const [snackOpen, setSnackOpen] = useState(false);
+  const [searchText,setSearchText] = useState('')
 
   const handleSnackClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -74,14 +75,14 @@ function Header({ selectedOrderId, getFiles,  setsearchOrder, searchById}) {
         <OutlinedInput
             id="outlined-adornment-password"
             type={'text'}
-            onChange={(e)=>setsearchOrder(e.target.value)}
+            onChange={(e)=>setSearchText(e.target.value)}
             className="searchBar"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
                   edge="end"
                 >
-                  <SearchIcon onClick={searchById}/>
+                  <SearchIcon onClick={()=>setsearchOrder(searchText)}/>
                 </IconButton>
               </InputAdornment>
             }
