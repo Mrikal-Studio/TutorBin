@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import "./App.css";
 import ChooseFiles from "./ChooseFiles";
 import Header from "./Header.js";
@@ -15,6 +15,13 @@ function App() {
     viewerInstance.UI.loadDocument(file);
   };
 
+    useEffect(()=> {
+        // debugger
+        if(Object.keys(files).length && viewerInstance){
+            handleSelectInstanceFile(files.questions[0].fileUrl)
+            console.log("files", files.questions[0].fileUrl)
+        }
+    }, [viewerInstance, files])
   console.log(files, "heyyyooooooooooooo");
 
   return (
