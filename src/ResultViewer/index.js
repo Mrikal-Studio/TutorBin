@@ -91,6 +91,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
   };
 
   console.log(figsList, "figsList");
+  console.log(text, "texttt wala");
   // funtion call to save Image to S3
   const handleSave = () => {
     if (alignment === "question") {
@@ -151,6 +152,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
           }
           setSavedQuestionsData([...x,y]);
           setCurrentQuestionNumber(x.length);
+          setText({ ...text, question: x[x.length - 1]?.text });
           setCurentQuestionData(y);
           setSelectedOptions({
             type: '',
@@ -180,6 +182,20 @@ function ResultViewer({ orderFile, selectedFileData }) {
     //api to get all the saved questions by orderid
   }, []);
 
+  const resetStateHandler = () => {
+    setText({ question: "", solution: "" });
+    setSelectedOptions({
+      type: "",
+      difficulty: "",
+      category: "",
+      instruction: "",
+      deadline: "",
+      lastQuestion: false,
+      dataFromPriceModel: false,
+    });
+    setPreviewImage(null);
+    setOCRImage(null);
+  };
   const handleSaveQuestionData = () => {
     const record = {
       text: text.question,
@@ -205,6 +221,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
       .then((res) => {
         console.log(res);
         setSnackOpen(true);
+        resetStateHandler();
       })
       .catch((err) => console.log(err));
 
@@ -269,9 +286,12 @@ function ResultViewer({ orderFile, selectedFileData }) {
   }, []);
 
   const openPrevQuestion = () => {
+    if (currQuestionNumber === 0) {
+      return;
+    }
     setCurentQuestionData(savedQuestionsData[currQuestionNumber - 1]);
     setCurrentQuestionNumber(currQuestionNumber - 1);
-    setText({ ...text, question: [currQuestionNumber - 1]?.text });
+    setText({ ...text, question: savedQuestionsData[currQuestionNumber - 1]?.text });
     setSelectedOptions({
       type: savedQuestionsData[currQuestionNumber - 1]?.type,
       difficulty: savedQuestionsData[currQuestionNumber - 1]?.difficulty,
@@ -283,11 +303,16 @@ function ResultViewer({ orderFile, selectedFileData }) {
     setFigsList(savedQuestionsData[currQuestionNumber - 1]?.image);
   };
 
-  console.log("selected Questions", selectedOptions);
+  console.log("currQuestionNumber currQuestionNumber", currQuestionNumber);
+  console.log("savedQuestionsData Questions", savedQuestionsData);
 
   const openNextQuestion = () => {
+    if (currQuestionNumber === savedQuestionsData.length - 1) {
+      resetStateHandler();
+      return;
+    }
     setCurentQuestionData(savedQuestionsData[currQuestionNumber + 1]);
-    setText({ ...text, question: [currQuestionNumber + 1]?.text });
+    setText({ ...text, question: savedQuestionsData[currQuestionNumber + 1]?.text });
 
     setCurrentQuestionNumber(currQuestionNumber + 1);
     setSelectedOptions({
@@ -347,7 +372,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
         <div className="resultViewer__cardHeader">
           <ToggleTab alignment={alignment} setAlignment={setAlignment} />
           <p className="resultViewer__dataNumber">
-            Question {currQuestionData ? currQuestionData?.questionNumber : 1}
+            Question {currQuestionNumber + 1}
           </p>
         </div>
         <p>Paste selected text below</p>
@@ -356,7 +381,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
           <textarea
             id="text"
             name="text"
-            value={text.question}
+            value={text?.question}
             className="questionContainer__review"
             placeholder="You can paste here and view your text..."
             onChange={(e) => handleText(e)}
@@ -365,7 +390,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
           <textarea
             id="text"
             name="text"
-            value={text.solution}
+            value={text?.solution}
             className="questionContainer__review"
             placeholder="You can paste here and view your text..."
             onChange={(e) => handleText(e)}
