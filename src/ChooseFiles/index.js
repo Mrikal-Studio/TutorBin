@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../api";
-import ModalNew from "../Components/Modal";
 import Header from "../Header.js";
 import "./ChooseFiles.css";
+import UpdateOrderModal from "./UpdateOrderModal";
 
 function ChooseFiles({
   handleSelectInstanceFile,
@@ -101,7 +101,10 @@ function ChooseFiles({
         setsearchOrder={setsearchOrder}
         searchById={searchById}
       />
-      <ModalNew selectedOrderId={files?._id} />
+      <UpdateOrderModal
+        selectedOrderId={files?._id}
+        subjectId={files?.subject?.id}
+      />
       <div className="chooseFiles">
         {files?.questions?.map((file) => (
           <span
