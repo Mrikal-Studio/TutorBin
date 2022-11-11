@@ -70,6 +70,7 @@ function ChooseFiles({
   return (
     <>
       <Header selectedOrderId={files?.incrementalId} getFiles={getFiles} setsearchOrder={setsearchOrder} searchById={searchById}/>
+      {console.log("here")}
       <div className="chooseFiles">
         {files?.questions?.map((file) => (
           <span
