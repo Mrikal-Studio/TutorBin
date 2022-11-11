@@ -9,10 +9,9 @@ import PermMediaIcon from "@mui/icons-material/PermMedia";
 import { Stack } from "@mui/system";
 import FigModal from "./FigModal";
 import SelectOptions from "./SelectOptions";
-import PriceModel from "./PriceModel";
+import ToggleTab from "./ToggleTab";
 
 function ResultViewer({ orderFile, selectedFileData }) {
-  const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [figModalOpen, setFigModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
@@ -21,8 +20,12 @@ function ResultViewer({ orderFile, selectedFileData }) {
   const [OCRImage, setOCRImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [figsList, setFigsList] = useState([]);
+  const [solutionFigsList, setSolutionsFigList] = useState([]);
   const [selectedFig, setSelectedFig] = useState(null);
-  const [text, setText] = useState("");
+  const [text, setText] = useState({
+    question: "",
+    solution: "",
+  });
   const [currQuestionNumber, setCurrentQuestionNumber] = useState();
   const [savedQuestionsData, setSavedQuestionsData] = useState([]);
   const [currQuestionData, setCurentQuestionData] = useState();
@@ -36,7 +39,9 @@ function ResultViewer({ orderFile, selectedFileData }) {
     dataFromPriceModel: false,
   });
   const [imgURLList, setImgURLList] = useState([]);
+  const [solutionimgURLList, setSolutionImgUrlList] = useState([]);
   const [priceModelData, setPriceModelData] = useState({});
+  const [alignment, setAlignment] = useState("question");
 
   console.log(orderFile, "orderFile");
 
@@ -63,11 +68,6 @@ function ResultViewer({ orderFile, selectedFileData }) {
     setSnackOpen(false);
   };
 
-  const handlePaste = (event) => {
-    console.log("bbb");
-    console.log("hhh", event.clipboardData.files);
-  };
-
   // function call to get OCR output text
   const getOCRData = () => {
     setLoading(true);
@@ -91,17 +91,29 @@ function ResultViewer({ orderFile, selectedFileData }) {
   };
 
   console.log(figsList, "figsList");
-  // funtioncall to save Image to S3
+  // funtion call to save Image to S3
   const handleSave = () => {
-    setFigsList([
-      ...figsList,
-      {
-        id: figsList.length,
-        file: OCRImage,
-        imageURI: URL.createObjectURL(OCRImage),
-        questionType: 0,
-      },
-    ]);
+    if (alignment === "question") {
+      setFigsList([
+        ...figsList,
+        {
+          id: figsList.length,
+          file: OCRImage,
+          imageURI: URL.createObjectURL(OCRImage),
+          questionType: 0,
+        },
+      ]);
+    } else {
+      setSolutionsFigList([
+        ...solutionFigsList,
+        {
+          id: solutionFigsList.length,
+          file: OCRImage,
+          imageURI: URL.createObjectURL(OCRImage),
+          questionType: 0,
+        },
+      ]);
+    }
     let formData = new FormData();
     formData.append("file", OCRImage);
 
@@ -113,7 +125,9 @@ function ResultViewer({ orderFile, selectedFileData }) {
       })
       .then((res) => {
         console.log(res);
-        setImgURLList([...imgURLList, res.data.data]);
+        alignment === "question"
+          ? setImgURLList([...imgURLList, res.data.data])
+          : setSolutionImgUrlList([...imgURLList, res.data.data]);
         setSnackOpen(true);
         setOpen(false);
         setOCROutputData("");
@@ -163,7 +177,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
 
   const handleSaveQuestionData = () => {
     const record = {
-      text: text,
+      text: text.question,
       image: imgURLList,
       type: selectedOptions.type,
       category: selectedOptions.category,
@@ -173,6 +187,10 @@ function ResultViewer({ orderFile, selectedFileData }) {
       orderId: orderFile._id,
       incrementalId: selectedFileData?.incrementalId,
       questionNumber: 1,
+      solutions: {
+        text: text.solution,
+        images: solutionimgURLList,
+      },
     };
     console.log(record, "record");
 
@@ -215,6 +233,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
   const openPrevQuestion = () => {
     setCurentQuestionData(savedQuestionsData[currQuestionNumber - 1]);
     setCurrentQuestionNumber(currQuestionNumber - 1);
+    setText({ ...text, question: [currQuestionNumber - 1]?.text });
     setSelectedOptions({
       type: savedQuestionsData[currQuestionNumber - 1]?.type,
       difficulty: savedQuestionsData[currQuestionNumber - 1]?.difficulty,
@@ -230,6 +249,8 @@ function ResultViewer({ orderFile, selectedFileData }) {
 
   const openNextQuestion = () => {
     setCurentQuestionData(savedQuestionsData[currQuestionNumber + 1]);
+    setText({ ...text, question: [currQuestionNumber + 1]?.text });
+
     setCurrentQuestionNumber(currQuestionNumber + 1);
     setSelectedOptions({
       type: savedQuestionsData[currQuestionNumber + 1]?.type,
@@ -243,6 +264,14 @@ function ResultViewer({ orderFile, selectedFileData }) {
   };
 
   console.log("currQuestionData", currQuestionData);
+
+  const handleText = (e) => {
+    if (alignment === "question") {
+      setText({ ...text, question: e.target.value });
+    } else {
+      setText({ ...text, solution: e.target.value });
+    }
+  };
 
   return (
     <div className="resultViewer">
@@ -277,50 +306,75 @@ function ResultViewer({ orderFile, selectedFileData }) {
         selectedFig={selectedFig}
       />
       <Card className="resultViewer__top">
-        <p>
-          Question {currQuestionData ? currQuestionData?.questionNumber : 1}
-        </p>
+        <div className="resultViewer__cardHeader">
+          <ToggleTab alignment={alignment} setAlignment={setAlignment} />
+          <p className="resultViewer__dataNumber">
+            Question {currQuestionData ? currQuestionData?.questionNumber : 1}
+          </p>
+        </div>
         <p>Paste selected text below</p>
 
-        <textarea
-          id="text"
-          name="text"
-          value={currQuestionData ? currQuestionData?.text : ""}
-          className="questionContainer__review"
-          placeholder="You can paste here and view your text..."
-          onChange={(e) => setText(e.target.value)}
-        ></textarea>
+        {alignment === "question" ? (
+          <textarea
+            id="text"
+            name="text"
+            value={text.question}
+            className="questionContainer__review"
+            placeholder="You can paste here and view your text..."
+            onChange={(e) => handleText(e)}
+          ></textarea>
+        ) : (
+          <textarea
+            id="text"
+            name="text"
+            value={text.solution}
+            className="questionContainer__review"
+            placeholder="You can paste here and view your text..."
+            onChange={(e) => handleText(e)}
+          ></textarea>
+        )}
 
         {/* <PriceModel priceModelData={setPriceModelData} /> */}
         <div className="resultViewer__figsList">
-          {figsList.map((fig) => (
-            <Stack spacing={1} alignItems="center">
-              <PermMediaIcon
-                key={fig.id}
-                className="resultViewer__figsIcon"
-                onClick={() => handleFigModalOpen(fig)}
-              />
-              <p>Fig {fig.id}</p>
-            </Stack>
-          ))}
+          {alignment === "question"
+            ? figsList?.map((fig) => (
+                <Stack spacing={1} alignItems="center">
+                  <PermMediaIcon
+                    key={fig.id}
+                    className="resultViewer__figsIcon"
+                    onClick={() => handleFigModalOpen(fig)}
+                  />
+                  <p>Fig {fig.id}</p>
+                </Stack>
+              ))
+            : solutionFigsList?.map((fig) => (
+                <Stack spacing={1} alignItems="center">
+                  <PermMediaIcon
+                    key={fig.id}
+                    className="resultViewer__figsIcon"
+                    onClick={() => handleFigModalOpen(fig)}
+                  />
+                  <p>Fig {fig.id}</p>
+                </Stack>
+              ))}
         </div>
         <Stack spacing={0}>
           <label>Paste snipped image below</label>
           <input
-            onPaste={handlePaste}
             onClick={(e) => e.preventDefault()}
             type="file"
-            ref={inputRef}
             accept="image/*"
             id={"document_attachment_doc"}
             className="custom__input"
           />
         </Stack>
-        <SelectOptions
-          selectedOptions={selectedOptions}
-          setSelectedOptions={setSelectedOptions}
-          priceModelData={priceModelData}
-        />
+        {alignment === "question" ? (
+          <SelectOptions
+            selectedOptions={selectedOptions}
+            setSelectedOptions={setSelectedOptions}
+            priceModelData={priceModelData}
+          />
+        ) : null}
         <Stack
           spacing={2}
           direction="row"
