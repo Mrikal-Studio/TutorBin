@@ -144,16 +144,21 @@ function ResultViewer({ orderFile, selectedFileData }) {
             (a, b) => a.questionNumber - b.questionNumber
           );
           console.log(x, "saved questions data");
-          setSavedQuestionsData(x);
-          setCurrentQuestionNumber(x.length - 1);
-          setCurentQuestionData(x[x.length - 1]);
+          let curr_qno = x[x.length - 1]?.questionNumber? x[x.length - 1]?.questionNumber +1 : 1
+
+          let y = {
+            "questionNumber": curr_qno,
+          }
+          setSavedQuestionsData([...x,y]);
+          setCurrentQuestionNumber(x.length);
+          setCurentQuestionData(y);
           setSelectedOptions({
-            type: x[x.length - 1]?.type,
-            difficulty: x[x.length - 1]?.difficulty,
-            category: x[x.length - 1]?.category,
-            instruction: x[x.length - 1]?.instruction,
-            deadline: x[x.length - 1]?.deadline,
-            lastQuestion: x[x.length - 1]?.lastQuestion,
+            type: '',
+            difficulty: '',
+            category: '',
+            instruction: '',
+            deadline: '',
+            lastQuestion: '',
           });
         })
         .catch((err) => console.log(err));
@@ -186,7 +191,8 @@ function ResultViewer({ orderFile, selectedFileData }) {
       deadline: selectedOptions.deadline,
       orderId: orderFile._id,
       incrementalId: selectedFileData?.incrementalId,
-      questionNumber: 1,
+      //questionNumber: 1,
+      questionNumber: currQuestionData?.questionNumber ? currQuestionData?.questionNumber : 1,
       solutions: {
         text: text.solution,
         images: solutionimgURLList,
@@ -201,7 +207,39 @@ function ResultViewer({ orderFile, selectedFileData }) {
         setSnackOpen(true);
       })
       .catch((err) => console.log(err));
+
+      let curr_qno = currQuestionData?.questionNumber +1
+
+      let x = {
+        "questionNumber": curr_qno,
+      }
+
+      let temp_arr = savedQuestionsData
+      for (let i = 0; i < savedQuestionsData.length; i++) {
+        if(temp_arr[i].questionNumber == record.questionNumber)
+        temp_arr[i] = record
+      }
+
+      setSavedQuestionsData([...temp_arr,x])
+
+      console.log("savedQuestionsData",savedQuestionsData)
+
+      setCurentQuestionData(x);
+      setText({ ...text, question: '' });
+
+    setCurrentQuestionNumber(currQuestionNumber + 1);
+    setSelectedOptions({
+      type: '',
+      difficulty: '',
+      category: '',
+      instruction: '',
+      deadline: '',
+      lastQuestion: '',
+    });
+   // setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
   };
+
+  console.log("ydrfytguhijlkigy", savedQuestionsData)
 
   const getPriceModelData = () => {
     axios
@@ -256,8 +294,8 @@ function ResultViewer({ orderFile, selectedFileData }) {
       type: savedQuestionsData[currQuestionNumber + 1]?.type,
       difficulty: savedQuestionsData[currQuestionNumber + 1]?.difficulty,
       category: savedQuestionsData[currQuestionNumber + 1]?.category,
-      instruction: savedQuestionsData[currQuestionNumber + 1]?.instruction,
-      deadline: savedQuestionsData[currQuestionNumber + 1]?.deadline,
+      instruction: savedQuestionsData[currQuestionNumber + 1]?.instruction || '',
+      deadline: savedQuestionsData[currQuestionNumber + 1]?.deadline || '',
       lastQuestion: savedQuestionsData[currQuestionNumber + 1]?.lastQuestion,
     });
     setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
