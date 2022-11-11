@@ -14,6 +14,10 @@ function ChooseFiles({
 }) {
   const [selectedFile, setSelectedFile] = useState();
   const [searchOrder, setsearchOrder] = useState();
+  const [open, setOpen] = useState(true);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleFile = (file) => {
     handleSelectInstanceFile(file.fileUrl);
@@ -29,6 +33,9 @@ function ChooseFiles({
         setFiles(res?.data?.data);
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
+        if (res?.data?.data?.questions.length > 0) {
+          handleOpen();
+        }
       })
       .catch((err) => console.log(err));
   };
@@ -44,6 +51,9 @@ function ChooseFiles({
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
         setsearchOrder();
+        if (res?.data?.data?.questions.length > 0) {
+          handleOpen();
+        }
         // set(true);
       })
       .catch((err) => console.log(err));
@@ -104,6 +114,9 @@ function ChooseFiles({
       <UpdateOrderModal
         selectedOrderId={files?._id}
         subjectId={files?.subject?.id}
+        handleClose={handleClose}
+        handleOpen={handleOpen}
+        open={open}
       />
       <div className="chooseFiles">
         {files?.questions?.map((file) => (
