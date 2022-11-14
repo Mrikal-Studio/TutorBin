@@ -206,7 +206,9 @@ function ResultViewer({ orderFile, selectedFileData }) {
       solutions: {
         text: text.solution,
         images: solutionimgURLList,
+        fileUrl: "",
       },
+      fileUrl: "",
     };
     console.log(record, "record");
 
@@ -253,7 +255,10 @@ function ResultViewer({ orderFile, selectedFileData }) {
     }
     setCurentQuestionData(savedQuestionsData[currQuestionNumber - 1]);
     setCurrentQuestionNumber(currQuestionNumber - 1);
-    setText({ ...text, question: savedQuestionsData[currQuestionNumber - 1]?.text });
+    setText({
+      ...text,
+      question: savedQuestionsData[currQuestionNumber - 1]?.text,
+    });
     setSelectedOptions({
       type: savedQuestionsData[currQuestionNumber - 1]?.type,
       difficulty: savedQuestionsData[currQuestionNumber - 1]?.difficulty,
@@ -274,7 +279,10 @@ function ResultViewer({ orderFile, selectedFileData }) {
       return;
     }
     setCurentQuestionData(savedQuestionsData[currQuestionNumber + 1]);
-    setText({ ...text, question: savedQuestionsData[currQuestionNumber + 1]?.text });
+    setText({
+      ...text,
+      question: savedQuestionsData[currQuestionNumber + 1]?.text,
+    });
 
     setCurrentQuestionNumber(currQuestionNumber + 1);
     setSelectedOptions({
