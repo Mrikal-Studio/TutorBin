@@ -18,8 +18,8 @@ function App() {
     useEffect(()=> {
         // debugger
         if(Object.keys(files).length && viewerInstance){
-            handleSelectInstanceFile(files.questions[0].fileUrl)
-            console.log("files", files.questions[0].fileUrl)
+            handleSelectInstanceFile(files.questions[0]?.fileUrl)
+            console.log("files", files.questions[0]?.fileUrl)
         }
     }, [viewerInstance, files])
   console.log(files, "heyyyooooooooooooo");
