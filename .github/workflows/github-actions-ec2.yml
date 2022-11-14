@@ -13,12 +13,12 @@ jobs:
     steps:
       - name: Checkout the files
         uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "14.x"
+#       - uses: actions/setup-node@v1
+#         with:
+#           node-version: "14.x"
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
-      - run: npm install
+#       - run: npm install
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
