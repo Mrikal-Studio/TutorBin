@@ -14,13 +14,14 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v2
       - run: npm i
+      - run: npm start
       
 #       - uses: actions/setup-node@v1
 #         with:
 #           node-version: "14.x"
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
-      - run: tmux attach-session -t 0
+#       - run: tmux attach-session -t 0
 #       - run: npm install
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
