@@ -14,7 +14,7 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v2
       - run: npm i
-      - run: exec tmux
+      - run: tmux new-session -s frontend -d
 #       - uses: actions/setup-node@v1
 #         with:
 #           node-version: "14.x"
