@@ -29,8 +29,9 @@ function ChooseFiles({
     axios
       .get(BASE_URL + "orders/")
       .then((res) => {
-        console.log(res?.data?.data, "1");
+        console.log("orderedFile", res?.data?.data, "1");
         setFiles(res?.data?.data);
+        // handleSelectInstanceFile(res?.data?.data?.questions[0]?.fileUrl)
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
         if (res?.data?.data?.questions.length > 0) {
@@ -48,6 +49,8 @@ function ChooseFiles({
       .then((res) => {
         console.log("res of the order by ID", res);
         setFiles(res?.data?.data);
+        // console.log("FileURL", res?.data?.data?.questions[0]?.fileUrl)
+        // handleSelectInstanceFile(res?.data?.data?.questions[0]?.fileUrl)
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
         setsearchOrder();
