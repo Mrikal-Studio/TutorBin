@@ -11,7 +11,12 @@ import FigModal from "./FigModal";
 import SelectOptions from "./SelectOptions";
 import ToggleTab from "./ToggleTab";
 
-function ResultViewer({ orderFile, selectedFileData }) {
+function ResultViewer({
+  orderFile,
+  selectedFileData,
+  alignment,
+  setAlignment,
+}) {
   const [open, setOpen] = useState(false);
   const [figModalOpen, setFigModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
@@ -41,7 +46,6 @@ function ResultViewer({ orderFile, selectedFileData }) {
   const [imgURLList, setImgURLList] = useState([]);
   const [solutionimgURLList, setSolutionImgUrlList] = useState([]);
   const [priceModelData, setPriceModelData] = useState({});
-  const [alignment, setAlignment] = useState("question");
 
   console.log(orderFile, "orderFile");
 
@@ -145,22 +149,24 @@ function ResultViewer({ orderFile, selectedFileData }) {
             (a, b) => a.questionNumber - b.questionNumber
           );
           console.log(x, "saved questions data");
-          let curr_qno = x[x.length - 1]?.questionNumber? x[x.length - 1]?.questionNumber +1 : 1
+          let curr_qno = x[x.length - 1]?.questionNumber
+            ? x[x.length - 1]?.questionNumber + 1
+            : 1;
 
           let y = {
-            "questionNumber": curr_qno,
-          }
-          setSavedQuestionsData([...x,y]);
+            questionNumber: curr_qno,
+          };
+          setSavedQuestionsData([...x, y]);
           setCurrentQuestionNumber(x.length);
           setText({ ...text, question: x[x.length - 1]?.text });
           setCurentQuestionData(y);
           setSelectedOptions({
-            type: '',
-            difficulty: '',
-            category: '',
-            instruction: '',
-            deadline: '',
-            lastQuestion: '',
+            type: "",
+            difficulty: "",
+            category: "",
+            instruction: "",
+            deadline: "",
+            lastQuestion: "",
           });
         })
         .catch((err) => console.log(err));
@@ -208,7 +214,9 @@ function ResultViewer({ orderFile, selectedFileData }) {
       orderId: orderFile._id,
       incrementalId: selectedFileData?.incrementalId,
       //questionNumber: 1,
-      questionNumber: currQuestionData?.questionNumber ? currQuestionData?.questionNumber : 1,
+      questionNumber: currQuestionData?.questionNumber
+        ? currQuestionData?.questionNumber
+        : 1,
       solutions: {
         text: text.solution,
         images: solutionimgURLList,
@@ -227,38 +235,38 @@ function ResultViewer({ orderFile, selectedFileData }) {
       })
       .catch((err) => console.log(err));
 
-      let curr_qno = currQuestionData?.questionNumber +1
+    let curr_qno = currQuestionData?.questionNumber + 1;
 
-      let x = {
-        "questionNumber": curr_qno,
-      }
+    let x = {
+      questionNumber: curr_qno,
+    };
 
-      let temp_arr = savedQuestionsData
-      for (let i = 0; i < savedQuestionsData.length; i++) {
-        if(temp_arr[i].questionNumber == record.questionNumber)
-        temp_arr[i] = record
-      }
+    let temp_arr = savedQuestionsData;
+    for (let i = 0; i < savedQuestionsData.length; i++) {
+      if (temp_arr[i].questionNumber == record.questionNumber)
+        temp_arr[i] = record;
+    }
 
-      setSavedQuestionsData([...temp_arr,x])
+    setSavedQuestionsData([...temp_arr, x]);
 
-      console.log("savedQuestionsData",savedQuestionsData)
+    console.log("savedQuestionsData", savedQuestionsData);
 
-      setCurentQuestionData(x);
-      setText({ ...text, question: '' });
+    setCurentQuestionData(x);
+    setText({ ...text, question: "" });
 
     setCurrentQuestionNumber(currQuestionNumber + 1);
     setSelectedOptions({
-      type: '',
-      difficulty: '',
-      category: '',
-      instruction: '',
-      deadline: '',
-      lastQuestion: '',
+      type: "",
+      difficulty: "",
+      category: "",
+      instruction: "",
+      deadline: "",
+      lastQuestion: "",
     });
-   // setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
+    // setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
   };
 
-  console.log("ydrfytguhijlkigy", savedQuestionsData)
+  console.log("ydrfytguhijlkigy", savedQuestionsData);
 
   const getPriceModelData = () => {
     axios
@@ -327,8 +335,9 @@ function ResultViewer({ orderFile, selectedFileData }) {
       type: savedQuestionsData[currQuestionNumber + 1]?.type,
       difficulty: savedQuestionsData[currQuestionNumber + 1]?.difficulty,
       category: savedQuestionsData[currQuestionNumber + 1]?.category,
-      instruction: savedQuestionsData[currQuestionNumber + 1]?.instruction || '',
-      deadline: savedQuestionsData[currQuestionNumber + 1]?.deadline || '',
+      instruction:
+        savedQuestionsData[currQuestionNumber + 1]?.instruction || "",
+      deadline: savedQuestionsData[currQuestionNumber + 1]?.deadline || "",
       lastQuestion: savedQuestionsData[currQuestionNumber + 1]?.lastQuestion,
     });
     setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);

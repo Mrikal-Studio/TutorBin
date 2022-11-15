@@ -11,6 +11,7 @@ function ChooseFiles({
   selectedFileData,
   setFiles,
   files,
+  alignment,
 }) {
   const [selectedFile, setSelectedFile] = useState();
   const [searchOrder, setsearchOrder] = useState();
@@ -43,7 +44,7 @@ function ChooseFiles({
 
   console.log("searchOrder", searchOrder);
 
-  useEffect(()=>{
+  useEffect(() => {
     axios
       .get(BASE_URL + `orders/?order_id=${searchOrder}`)
       .then((res) => {
@@ -56,14 +57,28 @@ function ChooseFiles({
         setsearchOrder();
       })
       .catch((err) => console.log(err));
-
-  },[searchOrder]);
-
-
+  }, [searchOrder]);
 
   useEffect(() => {
     getFiles();
   }, []);
+  console.log(files, "filessssss");
+
+  useEffect(() => {
+    if (!files) return;
+    if (alignment === "question") {
+      if (!files?.questions) return;
+      setSelectedFile(files?.questions[0]?._id);
+      setSelectedFileData(files?.questions[0]);
+    } else {
+      if (!files?.solutions) return;
+      // setSelectedFile(files?.solutions?._id);
+      // setSelectedFileData(files?.solutions);
+      // handleSelectInstanceFile(files?.solutions);
+      handleFile(files?.solutions);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alignment, files]);
 
   const getBackground = (file) => {
     if (file.hasOwnProperty("status")) {
@@ -105,17 +120,16 @@ function ChooseFiles({
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const order_id = urlParams.get('order_id');
+    const order_id = urlParams.get("order_id");
 
-    console.log("order_id ghiuhuihiuhiu",order_id)
-    if(order_id){
-    setsearchOrder(order_id)
-   // searchById(order_id)
+    console.log("order_id ghiuhuihiuhiu", order_id);
+    if (order_id) {
+      setsearchOrder(order_id);
+      // searchById(order_id)
     }
-  },[])
-
+  }, []);
 
   return (
     <>
@@ -132,30 +146,55 @@ function ChooseFiles({
         open={open}
       />
       <div className="chooseFiles">
-        {files?.questions?.map((file) => (
+        {alignment == "question" ? (
+          files?.questions?.map((file) => (
+            <span
+              disabled
+              className="file"
+              id="file"
+              key={file._id}
+              onClick={() => {
+                if (file?.status === "completed") {
+                  return;
+                }
+                handleFile(file);
+              }}
+              style={{
+                border:
+                  file?.status === "completed"
+                    ? "1.2px solid #4BB543"
+                    : "1.2px solid #1C84FF",
+                background: getBackground(file),
+                color: getColor(file),
+              }}
+            >
+              {file.fileName}
+            </span>
+          ))
+        ) : files?.solutions ? (
           <span
             disabled
             className="file"
             id="file"
-            key={file._id}
+            key={files?.solutions._id}
             onClick={() => {
-              if (file?.status === "completed") {
+              if (files?.solutions?.status === "completed") {
                 return;
               }
-              handleFile(file);
+              handleFile(files?.solutions);
             }}
             style={{
               border:
-                file?.status === "completed"
+                files?.solutions?.status === "completed"
                   ? "1.2px solid #4BB543"
                   : "1.2px solid #1C84FF",
-              background: getBackground(file),
-              color: getColor(file),
+              background: getBackground(files?.solutions),
+              color: getColor(files?.solutions),
             }}
           >
-            {file.fileName}
+            {files?.solutions.filname}
           </span>
-        ))}
+        ) : null}
       </div>
     </>
   );
