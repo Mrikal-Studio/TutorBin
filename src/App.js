@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import ChooseFiles from "./ChooseFiles";
 import Header from "./Header.js";
+import Loader from ".././src/Loader/index";
 import PDFViewer from "./PDFViewer";
 import ResultViewer from "./ResultViewer";
 
@@ -10,6 +11,7 @@ function App() {
   const [files, setFiles] = useState({});
   const [selectedFileData, setSelectedFileData] = useState({});
   const [alignment, setAlignment] = useState("question");
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSelectInstanceFile = (file) => {
     console.log(file, "hjiujhjikjhjikj fileee");
@@ -26,6 +28,10 @@ function App() {
     }
   }, [viewerInstance, selectedFileData]);
   console.log(files, "heyyyooooooooooooo");
+
+  if (!isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="app">
