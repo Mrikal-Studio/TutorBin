@@ -66,7 +66,7 @@ function Header({ selectedOrderId, getFiles, setsearchOrder }) {
           ></img>
         </div>
         <Stack direction={"row"} spacing={3} alignItems="center">
-          <p style={{ fontSize: "0.8rem", fontWeight: "400" }}>
+          <p style={{ fontSize: "0.9rem", fontWeight: "500" }}>
             Order No. {selectedOrderId}
           </p>
           {/* <Button variant="contained" className="header__getLatestOrder">
