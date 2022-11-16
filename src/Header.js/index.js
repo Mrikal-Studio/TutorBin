@@ -101,6 +101,7 @@ function Header({ selectedOrderId, getFiles, setsearchOrder }) {
             type={"text"}
             onChange={(e) => setSearchText(e.target.value)}
             className="searchBar"
+            autoFocus={false}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton edge="end">
@@ -108,7 +109,6 @@ function Header({ selectedOrderId, getFiles, setsearchOrder }) {
                 </IconButton>
               </InputAdornment>
             }
-            label="Search Order"
           />
         </Stack>
       </div>
