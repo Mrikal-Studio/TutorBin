@@ -193,6 +193,7 @@ function ResultViewer({
     });
     setPreviewImage(null);
     setOCRImage(null);
+    setSolutionsFigList([]);
   };
   const handleSaveQuestionData = () => {
     const record = {
@@ -241,7 +242,6 @@ function ResultViewer({
 
     setCurentQuestionData(x);
     setText({ ...text, question: "" });
-
     setCurrentQuestionNumber(currQuestionNumber + 1);
     setSelectedOptions({
       type: "",
@@ -253,7 +253,8 @@ function ResultViewer({
     });
     // setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
   };
-
+  
+  console.log("ydrfytguhijlkigy", savedQuestionsData);
   const getPriceModelData = () => {
     axios
       .post(BASE_URL + "pricemodel/" + "63293d39a0e7afd2bf68f555")
@@ -289,6 +290,7 @@ function ResultViewer({
     setText({
       ...text,
       question: savedQuestionsData[currQuestionNumber - 1]?.text,
+      solution: savedQuestionsData[currQuestionNumber - 1]?.solutions?.text,
     });
     setSelectedOptions({
       type: savedQuestionsData[currQuestionNumber - 1]?.type,
@@ -299,6 +301,9 @@ function ResultViewer({
       lastQuestion: savedQuestionsData[currQuestionNumber - 1]?.lastQuestion,
     });
     setFigsList(savedQuestionsData[currQuestionNumber - 1]?.image);
+    setSolutionsFigList(
+      savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
+    );
   };
 
   const openNextQuestion = () => {
@@ -310,6 +315,7 @@ function ResultViewer({
     setText({
       ...text,
       question: savedQuestionsData[currQuestionNumber + 1]?.text,
+      solution: savedQuestionsData[currQuestionNumber - 1]?.solutions?.text,
     });
 
     setCurrentQuestionNumber(currQuestionNumber + 1);
@@ -323,6 +329,9 @@ function ResultViewer({
       lastQuestion: savedQuestionsData[currQuestionNumber + 1]?.lastQuestion,
     });
     setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
+    setSolutionsFigList(
+      savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
+    );
   };
 
   const handleText = (e) => {
