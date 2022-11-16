@@ -11,7 +11,12 @@ import FigModal from "./FigModal";
 import SelectOptions from "./SelectOptions";
 import ToggleTab from "./ToggleTab";
 
-function ResultViewer({ orderFile, selectedFileData }) {
+function ResultViewer({
+  orderFile,
+  selectedFileData,
+  alignment,
+  setAlignment,
+}) {
   const [open, setOpen] = useState(false);
   const [figModalOpen, setFigModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
@@ -41,7 +46,6 @@ function ResultViewer({ orderFile, selectedFileData }) {
   const [imgURLList, setImgURLList] = useState([]);
   const [solutionimgURLList, setSolutionImgUrlList] = useState([]);
   const [priceModelData, setPriceModelData] = useState({});
-  const [alignment, setAlignment] = useState("question");
 
   console.log(orderFile, "orderFile");
 
@@ -249,8 +253,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
     console.log("savedQuestionsData", savedQuestionsData);
 
     setCurentQuestionData(x);
-    setText({ ...text, question: "", solution: "" });
-
+    setText({ ...text, question: "" });
     setCurrentQuestionNumber(currQuestionNumber + 1);
     setSelectedOptions({
       type: "",
@@ -263,8 +266,7 @@ function ResultViewer({ orderFile, selectedFileData }) {
     // setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
   };
 
-  console.log("savedQuestionsData waleeeee", savedQuestionsData);
-
+  console.log("ydrfytguhijlkigy", savedQuestionsData);
   const getPriceModelData = () => {
     axios
       .post(BASE_URL + "pricemodel/" + "63293d39a0e7afd2bf68f555")

@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import ChooseFiles from "./ChooseFiles";
 import Header from "./Header.js";
@@ -9,19 +9,22 @@ function App() {
   const [viewerInstance, setViewerInstance] = useState();
   const [files, setFiles] = useState({});
   const [selectedFileData, setSelectedFileData] = useState({});
+  const [alignment, setAlignment] = useState("question");
 
   const handleSelectInstanceFile = (file) => {
     console.log(file, "hjiujhjikjhjikj fileee");
     viewerInstance.UI.loadDocument(file);
   };
 
-    useEffect(()=> {
-        // debugger
-        if(Object.keys(files).length && viewerInstance){
-            handleSelectInstanceFile(files.questions[0]?.fileUrl)
-            console.log("files", files.questions[0]?.fileUrl)
-        }
-    }, [viewerInstance, files])
+  console.log(viewerInstance, "hey");
+
+  useEffect(() => {
+    // debugger
+    if (selectedFileData && viewerInstance) {
+      handleSelectInstanceFile(selectedFileData?.fileUrl);
+      console.log("files", selectedFileData?.fileUrl);
+    }
+  }, [viewerInstance, selectedFileData]);
   console.log(files, "heyyyooooooooooooo");
 
   return (
@@ -32,10 +35,16 @@ function App() {
         setFiles={setFiles}
         setSelectedFileData={setSelectedFileData}
         selectedFileData={selectedFileData}
+        alignment={alignment}
       />
       <div className="container">
         <PDFViewer setViewerInstance={setViewerInstance} />
-        <ResultViewer orderFile={files} selectedFileData={selectedFileData} />
+        <ResultViewer
+          orderFile={files}
+          selectedFileData={selectedFileData}
+          alignment={alignment}
+          setAlignment={setAlignment}
+        />
       </div>
     </div>
   );
