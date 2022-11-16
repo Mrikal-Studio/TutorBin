@@ -14,11 +14,8 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleSelectInstanceFile = (file) => {
-    console.log(file, "hjiujhjikjhjikj fileee");
     viewerInstance.UI.loadDocument(file);
   };
-
-  console.log(viewerInstance, "hey");
 
   useEffect(() => {
     // debugger
@@ -27,7 +24,6 @@ function App() {
       console.log("files", selectedFileData?.fileUrl);
     }
   }, [viewerInstance, selectedFileData]);
-  console.log(files, "heyyyooooooooooooo");
 
   if (!isLoading) {
     return <Loader />;

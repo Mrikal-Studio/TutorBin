@@ -47,8 +47,6 @@ function ResultViewer({
   const [solutionimgURLList, setSolutionImgUrlList] = useState([]);
   const [priceModelData, setPriceModelData] = useState({});
 
-  console.log(orderFile, "orderFile");
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
@@ -84,18 +82,14 @@ function ResultViewer({
         },
       })
       .then((res) => {
-        console.log(res.data.data, "textttt");
         setOCROutputData(res.data.data);
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
       });
   };
 
-  console.log(figsList, "figsList");
-  console.log(text, "texttt wala");
   // funtion call to save Image to S3
   const handleSave = () => {
     if (alignment === "question") {
@@ -129,7 +123,6 @@ function ResultViewer({
         },
       })
       .then((res) => {
-        console.log(res);
         alignment === "question"
           ? setImgURLList([...imgURLList, res.data.data])
           : setSolutionImgUrlList([...imgURLList, res.data.data]);
@@ -148,7 +141,6 @@ function ResultViewer({
           let x = res?.data?.data.sort(
             (a, b) => a.questionNumber - b.questionNumber
           );
-          console.log(x, "saved questions data");
           let curr_qno = x[x.length - 1]?.questionNumber
             ? x[x.length - 1]?.questionNumber + 1
             : 1;
@@ -225,12 +217,10 @@ function ResultViewer({
       },
       fileUrl: "",
     };
-    console.log(record, "record");
 
     axios
       .post(BASE_URL + "question-meta-data", record)
       .then((res) => {
-        console.log(res);
         setSnackOpen(true);
         resetStateHandler();
       })
@@ -250,8 +240,6 @@ function ResultViewer({
 
     setSavedQuestionsData([...temp_arr, x]);
 
-    console.log("savedQuestionsData", savedQuestionsData);
-
     setCurentQuestionData(x);
     setText({ ...text, question: "" });
     setCurrentQuestionNumber(currQuestionNumber + 1);
@@ -265,13 +253,12 @@ function ResultViewer({
     });
     // setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
   };
-
+  
   console.log("ydrfytguhijlkigy", savedQuestionsData);
   const getPriceModelData = () => {
     axios
       .post(BASE_URL + "pricemodel/" + "63293d39a0e7afd2bf68f555")
       .then((res) => {
-        console.log(res?.data?.data, "price model data");
         setPriceModelData(res?.data?.data);
         setSelectedOptions({
           ...selectedOptions,
@@ -319,9 +306,6 @@ function ResultViewer({
     );
   };
 
-  console.log("currQuestionNumber currQuestionNumber", currQuestionNumber);
-  console.log("savedQuestionsData Questions", savedQuestionsData);
-
   const openNextQuestion = () => {
     if (currQuestionNumber === savedQuestionsData.length - 1) {
       resetStateHandler();
@@ -349,8 +333,6 @@ function ResultViewer({
       savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
     );
   };
-
-  console.log("currQuestionData", currQuestionData);
 
   const handleText = (e) => {
     if (alignment === "question") {
