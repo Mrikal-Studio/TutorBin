@@ -4,6 +4,11 @@ import ChooseFiles from "./ChooseFiles";
 import Header from "./Header.js";
 import PDFViewer from "./PDFViewer";
 import ResultViewer from "./ResultViewer";
+import ReactGA from 'react-ga';
+
+const TRACKING_ID = "G-68QMS19WG7";
+
+ReactGA.initialize(TRACKING_ID);
 
 function App() {
   const [viewerInstance, setViewerInstance] = useState();
