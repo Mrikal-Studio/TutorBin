@@ -18,6 +18,7 @@ import { BASE_URL } from "../api";
 import { QUESTION_TYPE } from "../utils/dropDownData";
 import { useState } from "react";
 import { useEffect } from "react";
+import Loader from "../Loader/index";
 
 const style = {
   position: "absolute",
@@ -43,6 +44,7 @@ export default function UpdateOrderModal({
   const [Date, setDate] = useState();
   const [subjectData, setSubjectData] = useState([]);
   const [snackOpen, setSnackOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleChange = (event) => {
     setType(event.target.value);
@@ -59,6 +61,7 @@ export default function UpdateOrderModal({
     axios
       .get(BASE_URL + `subjects?search=${params}&page=1&limit=5`)
       .then((res) => {
+        setIsLoading(false);
         console.log(res?.data?.data, "subject get");
         res?.data?.data?.map((subject) =>
           tempdata.push({
@@ -99,6 +102,10 @@ export default function UpdateOrderModal({
 
     setSnackOpen(false);
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div>
