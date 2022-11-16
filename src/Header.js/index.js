@@ -1,16 +1,22 @@
-import { Alert, Button, IconButton, InputAdornment, Snackbar, Stack } from "@mui/material";
+import {
+  Alert,
+  Button,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  Stack,
+} from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import { BASE_URL } from "../api";
 import "./Header.css";
-import SearchIcon from '@mui/icons-material/Search';
-import TextField from '@mui/material/TextField';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import SearchIcon from "@mui/icons-material/Search";
+import TextField from "@mui/material/TextField";
+import OutlinedInput from "@mui/material/OutlinedInput";
 
-
-function Header({ selectedOrderId, getFiles,  setsearchOrder}) {
+function Header({ selectedOrderId, getFiles, setsearchOrder }) {
   const [snackOpen, setSnackOpen] = useState(false);
-  const [searchText,setSearchText] = useState('')
+  const [searchText, setSearchText] = useState("");
 
   const handleSnackClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -37,58 +43,75 @@ function Header({ selectedOrderId, getFiles,  setsearchOrder}) {
   const getNewOrder = () => {};
 
   return (
-    <div className="header">
-      <Snackbar
-        open={snackOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
+    <div>
+      <div className="header">
+        <Snackbar
+          open={snackOpen}
+          autoHideDuration={6000}
           onClose={handleSnackClose}
-          severity="success"
-          sx={{ width: "100%" }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          Order Completed Successfully!!!
-        </Alert>
-      </Snackbar>
-      <p>PDF Viewer and OCR Reader</p>
-      <Stack direction={"row"} spacing={3} alignItems="center">
-        <p>Order No. {selectedOrderId}</p>
-        {/* <Button variant="contained" className="header__getLatestOrder">
+          <Alert
+            onClose={handleSnackClose}
+            severity="success"
+            sx={{ width: "100%" }}
+          >
+            Order Completed Successfully!!!
+          </Alert>
+        </Snackbar>
+        <div>
+          <img
+            className="logo"
+            src="https://static.tutorbin.com/static/logo/tblogo-new.png"
+          ></img>
+        </div>
+        <Stack direction={"row"} spacing={3} alignItems="center">
+          <p style={{ fontSize: "0.9rem", fontWeight: "500" }}>
+            Order No. {selectedOrderId}
+          </p>
+          {/* <Button variant="contained" className="header__getLatestOrder">
           Get New Order
         </Button> */}
-        <Button
-          variant="contained"
-          className="header__getLatestOrder"
-          onClick={getLatestOrder}
-        >
-          Get Latest Order
-        </Button>
-        <Button
-          variant="contained"
-          className="header__getLatestOrder"
-          onClick={handleCompleteOrder}
-        >
-          Complete Order
-        </Button>
-        <OutlinedInput
+          <Button
+            style={{
+              fontSize: "0.8rem",
+              borderColor: "#D3D3D3",
+              fontWeight: "600",
+            }}
+            variant="outlined"
+            className="header__getLatestOrder"
+            onClick={getLatestOrder}
+          >
+            Get Latest Order
+          </Button>
+          <Button
+            style={{
+              fontSize: "0.8rem",
+              borderColor: "#D3D3D3",
+              fontWeight: "600",
+            }}
+            variant="outlined"
+            className="header__getLatestOrder"
+            onClick={handleCompleteOrder}
+          >
+            Complete Order
+          </Button>
+          <OutlinedInput
             id="outlined-adornment-password"
-            type={'text'}
-            onChange={(e)=>setSearchText(e.target.value)}
+            type={"text"}
+            onChange={(e) => setSearchText(e.target.value)}
             className="searchBar"
+            autoFocus={false}
             endAdornment={
               <InputAdornment position="end">
-                <IconButton
-                  edge="end"
-                >
-                  <SearchIcon onClick={()=>setsearchOrder(searchText)}/>
+                <IconButton edge="end">
+                  <SearchIcon onClick={() => setsearchOrder(searchText)} />
                 </IconButton>
               </InputAdornment>
             }
-            label="Search Order"
           />
-      </Stack>
+        </Stack>
+      </div>
     </div>
   );
 }

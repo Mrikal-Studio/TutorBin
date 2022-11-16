@@ -42,8 +42,6 @@ function ChooseFiles({
       .catch((err) => console.log(err));
   };
 
-  console.log("searchOrder", searchOrder);
-
   useEffect(() => {
     axios
       .get(BASE_URL + `orders/?order_id=${searchOrder}`)
@@ -62,7 +60,6 @@ function ChooseFiles({
   useEffect(() => {
     getFiles();
   }, []);
-  console.log(files, "filessssss");
 
   useEffect(() => {
     if (!files) return;
@@ -124,7 +121,6 @@ function ChooseFiles({
     const urlParams = new URLSearchParams(window.location.search);
     const order_id = urlParams.get("order_id");
 
-    console.log("order_id ghiuhuihiuhiu", order_id);
     if (order_id) {
       setsearchOrder(order_id);
       // searchById(order_id)

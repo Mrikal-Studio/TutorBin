@@ -21,7 +21,6 @@ function SelectOptions({
   selectedOptions,
   priceModelData,
 }) {
-  console.log(selectedOptions, "selectedOptions==========");
   const handleTypeChange = (e) => {
     setSelectedOptions({ ...selectedOptions, type: e.target.value });
   };
@@ -31,7 +30,6 @@ function SelectOptions({
   const handleCategoryChange = (e) => {
     setSelectedOptions({ ...selectedOptions, category: e.target.value });
   };
-  console.log("new component",selectedOptions)
   return (
     <Box sx={{ flexGrow: 1, marginTop: "2rem" }}>
       <Grid container spacing={2}>
@@ -114,7 +112,11 @@ function SelectOptions({
             name="deadline"
             min="2022-09-01"
             className="selectOptions__date"
-            value={selectedOptions? moment(selectedOptions?.deadline).format("YYYY-MM-DD"):"2000-08-18"}
+            value={
+              selectedOptions
+                ? moment(selectedOptions?.deadline).format("YYYY-MM-DD")
+                : "2000-08-18"
+            }
             onChange={(e) =>
               setSelectedOptions({
                 ...selectedOptions,
@@ -127,7 +129,11 @@ function SelectOptions({
           <FormControlLabel
             control={
               <Checkbox
-              value={selectedOptions?.lastQuestion ? selectedOptions?.lastQuestion : false}
+                value={
+                  selectedOptions?.lastQuestion
+                    ? selectedOptions?.lastQuestion
+                    : false
+                }
                 onChange={(e) =>
                   setSelectedOptions({
                     ...selectedOptions,

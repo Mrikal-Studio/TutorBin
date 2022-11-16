@@ -74,8 +74,6 @@ export default function UpdateOrderModal({
     getSubjectData();
   }, []);
 
-  console.log(Subject, "subject");
-
   const saveModalData = () => {
     const body = {
       type: type,
@@ -88,7 +86,6 @@ export default function UpdateOrderModal({
     axios
       .put(BASE_URL + "orders/" + selectedOrderId, body)
       .then((res) => {
-        console.log(res, "update wala order bey");
         handleClose();
         setSnackOpen(true);
       })

@@ -1,19 +1,29 @@
 .header {
   height: 50px;
   padding: 1rem;
-  background-color: #00a5e4;
-  color: white;
+  background-color: white;
+  color: black;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-bottom: solid 3px #eaeaea;
+  padding: 2rem 2rem;
 }
 
 .header__getLatestOrder {
-  background-color: #494a4c !important;
+  color: #00a5e3 !important;
 }
 .searchBar {
   background-color: #fffc !important;
   height: 24px !important;
   /* max-height: 20px !important; */
   padding: 1rem;
+}
+.searchBar:active {
+  outline: none;
+  border: none;
+}
+
+.logo {
+  width: 8rem;
 }
