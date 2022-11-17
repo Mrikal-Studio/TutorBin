@@ -17,6 +17,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 function Header({ selectedOrderId, getFiles, setsearchOrder }) {
   const [snackOpen, setSnackOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [isCompletingOrder, setIsCompletingOrder] = useState(false);
 
   const handleSnackClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -27,13 +28,18 @@ function Header({ selectedOrderId, getFiles, setsearchOrder }) {
   };
 
   const handleCompleteOrder = () => {
+    setIsCompletingOrder(true);
     axios
       .put(BASE_URL + "orders/complete/" + selectedOrderId)
       .then((res) => {
+        setIsCompletingOrder(false);
         console.log(res);
         setSnackOpen(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setIsCompletingOrder(false);
+        console.log(err);
+      });
   };
 
   const getLatestOrder = () => {
@@ -94,7 +100,7 @@ function Header({ selectedOrderId, getFiles, setsearchOrder }) {
             className="header__getLatestOrder"
             onClick={handleCompleteOrder}
           >
-            Complete Order
+            {isCompletingOrder ? "Completing Order..." : "Complete Order"}
           </Button>
           <OutlinedInput
             id="outlined-adornment-password"
