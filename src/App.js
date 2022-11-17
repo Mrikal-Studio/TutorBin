@@ -4,10 +4,11 @@ import ChooseFiles from "./ChooseFiles";
 import Header from "./Header.js";
 import PDFViewer from "./PDFViewer";
 import ResultViewer from "./ResultViewer";
-
+import Loader from "../src/Loader/index";
 function App() {
   const [viewerInstance, setViewerInstance] = useState();
   const [files, setFiles] = useState({});
+  const [loadingFiles, setLoadingFiles] = useState(false);
   const [selectedFileData, setSelectedFileData] = useState({});
   const [alignment, setAlignment] = useState("question");
 
@@ -32,16 +33,22 @@ function App() {
         setSelectedFileData={setSelectedFileData}
         selectedFileData={selectedFileData}
         alignment={alignment}
+        loadingFiles={loadingFiles}
+        setLoadingFiles={setLoadingFiles}
       />
-      <div className="container">
-        <PDFViewer setViewerInstance={setViewerInstance} />
-        <ResultViewer
-          orderFile={files}
-          selectedFileData={selectedFileData}
-          alignment={alignment}
-          setAlignment={setAlignment}
-        />
-      </div>
+      {loadingFiles ? (
+        <Loader />
+      ) : (
+        <div className="container">
+          <PDFViewer setViewerInstance={setViewerInstance} />
+          <ResultViewer
+            orderFile={files}
+            selectedFileData={selectedFileData}
+            alignment={alignment}
+            setAlignment={setAlignment}
+          />
+        </div>
+      )}
     </div>
   );
 }
