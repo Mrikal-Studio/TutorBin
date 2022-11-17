@@ -16,11 +16,7 @@ import {
   InputLabel,
 } from "@mui/material";
 
-function SelectOptions({
-  setSelectedOptions,
-  selectedOptions,
-  priceModelData,
-}) {
+function SelectOptions({ setSelectedOptions, selectedOptions }) {
   const handleTypeChange = (e) => {
     setSelectedOptions({ ...selectedOptions, type: e.target.value });
   };
