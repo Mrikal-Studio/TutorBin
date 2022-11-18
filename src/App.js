@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import ChooseFiles from "./ChooseFiles";
-import Header from "./Header.js";
 import PDFViewer from "./PDFViewer";
 import ResultViewer from "./ResultViewer";
 
@@ -21,6 +20,7 @@ function App() {
       handleSelectInstanceFile(selectedFileData?.fileUrl);
       console.log("files", selectedFileData?.fileUrl);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewerInstance, selectedFileData]);
 
   return (

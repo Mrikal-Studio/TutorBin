@@ -2,7 +2,7 @@ import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import React from "react";
 
 function ToggleTab({ alignment, setAlignment }) {
-  const handleChange = (event, newAlignment) => {
+  const handleChange = (newAlignment) => {
     setAlignment(newAlignment);
   };
   return (
