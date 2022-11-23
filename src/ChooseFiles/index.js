@@ -33,7 +33,14 @@ function ChooseFiles({
         setFiles(res?.data?.data);
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
-        if (res?.data?.data?.questions.some((data) => data.status)) {
+        if (
+          !(
+            res?.data?.data?.questions.some((data) => data.status) &&
+            res?.data?.data?.questions.some(
+              (data) => data.status === "completed"
+            )
+          )
+        ) {
           handleOpen();
         }
       })
