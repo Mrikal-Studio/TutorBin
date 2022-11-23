@@ -98,7 +98,6 @@ export default function UpdateOrderModal({
     if (reason === "clickaway") {
       return;
     }
-
     setSnackOpen(false);
   };
 
@@ -157,6 +156,13 @@ export default function UpdateOrderModal({
             direction="row"
             className="resultviewer__finalAction"
           >
+            <Button
+              variant="contained"
+              className="resultViewer__cancel"
+              onClick={handleClose}
+            >
+              Cancel
+            </Button>
             <Button
               variant="contained"
               className="resultViewer__save"
