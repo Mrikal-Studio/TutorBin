@@ -212,6 +212,7 @@ function ResultViewer({
       deadline: selectedOptions.deadline,
       orderId: orderFile._id,
       incrementalId: selectedFileData?.incrementalId,
+      subjectId: orderFile?.subject?.id,
       questionNumber: currQuestionData?.questionNumber
         ? currQuestionData?.questionNumber
         : 1,
