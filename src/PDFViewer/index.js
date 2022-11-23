@@ -36,6 +36,7 @@ function PDFViewer({ setViewerInstance }) {
         );
       })
       .catch((err) => console.log(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <div className="webviewer" ref={viewer}></div>;

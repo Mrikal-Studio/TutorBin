@@ -1,11 +1,6 @@
 import { Modal } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import React from "react";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 
 const style = {
   position: "absolute",
@@ -24,30 +19,10 @@ function FigModal({ open, handleClose, selectedFig }) {
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <Stack spacing={2}>
-          <img src={selectedFig?.imageURI?selectedFig?.imageURI:selectedFig} alt="preview__image" />
-          {/* <FormControl>
-            <FormLabel id="demo-row-radio-buttons-group-label">
-              Question Type
-            </FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="demo-row-radio-buttons-group-label"
-              name="row-radio-buttons-group"
-            >
-              <FormControlLabel value="MCQ" control={<Radio />} label="MCQ" />
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
-              <FormControlLabel
-                value="Lab Project"
-                control={<Radio />}
-                label="Lab Project"
-              />
-              <FormControlLabel
-                value="disabled"
-                control={<Radio />}
-                label="other"
-              />
-            </RadioGroup>
-          </FormControl> */}
+          <img
+            src={selectedFig?.imageURI ? selectedFig?.imageURI : selectedFig}
+            alt="preview__image"
+          />
         </Stack>
       </Box>
     </Modal>
