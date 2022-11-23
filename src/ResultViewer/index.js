@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ResultViewer.css";
 import { Button, Card, Snackbar } from "@mui/material";
 import Alert from "@mui/material/Alert";
@@ -72,7 +72,6 @@ function ResultViewer({
     setSnackOpen(false);
   };
 
-  // function call to get OCR output text
   const getOCRData = () => {
     setLoadingOCRData(true);
     const formData = new FormData();
@@ -93,7 +92,6 @@ function ResultViewer({
       });
   };
 
-  // funtion call to save Image to S3
   const handleSave = () => {
     if (alignment === "question") {
       setFigsList([
@@ -173,6 +171,7 @@ function ResultViewer({
 
   useEffect(() => {
     getSavedQuestionData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderFile]);
 
   useEffect(() => {
@@ -184,7 +183,7 @@ function ResultViewer({
       setOCRImage(e.clipboardData.files[0]);
       handleOpen();
     });
-    //api to get all the saved questions by orderid
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const resetStateHandler = () => {
@@ -246,7 +245,7 @@ function ResultViewer({
 
     let temp_arr = savedQuestionsData;
     for (let i = 0; i < savedQuestionsData.length; i++) {
-      if (temp_arr[i].questionNumber == record.questionNumber)
+      if (temp_arr[i].questionNumber === record.questionNumber)
         temp_arr[i] = record;
     }
 
@@ -263,7 +262,6 @@ function ResultViewer({
       deadline: "",
       lastQuestion: "",
     });
-    // setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
   };
 
   console.log("ydrfytguhijlkigy", savedQuestionsData);
@@ -291,6 +289,7 @@ function ResultViewer({
 
   useEffect(() => {
     getPriceModelData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const openPrevQuestion = () => {

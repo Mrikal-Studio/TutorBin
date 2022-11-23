@@ -23,6 +23,7 @@ function App() {
       handleSelectInstanceFile(selectedFileData?.fileUrl);
       console.log("files", selectedFileData?.fileUrl);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewerInstance, selectedFileData]);
 
   if (!isLoading) {

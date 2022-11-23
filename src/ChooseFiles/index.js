@@ -8,7 +8,6 @@ import UpdateOrderModal from "./UpdateOrderModal";
 function ChooseFiles({
   handleSelectInstanceFile,
   setSelectedFileData,
-  selectedFileData,
   setFiles,
   files,
   alignment,
@@ -32,7 +31,6 @@ function ChooseFiles({
       .then((res) => {
         console.log("orderedFile", res?.data?.data, "1");
         setFiles(res?.data?.data);
-        // handleSelectInstanceFile(res?.data?.data?.questions[0]?.fileUrl)
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
         if (
@@ -55,17 +53,17 @@ function ChooseFiles({
       .then((res) => {
         console.log("res of the order by ID", res);
         setFiles(res?.data?.data);
-        // console.log("FileURL", res?.data?.data?.questions[0]?.fileUrl)
-        // handleSelectInstanceFile(res?.data?.data?.questions[0]?.fileUrl)
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
         setsearchOrder();
       })
       .catch((err) => console.log(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchOrder]);
 
   useEffect(() => {
     getFiles();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -76,9 +74,6 @@ function ChooseFiles({
       setSelectedFileData(files?.questions[0]);
     } else {
       if (!files?.solutions) return;
-      // setSelectedFile(files?.solutions?._id);
-      // setSelectedFileData(files?.solutions);
-      // handleSelectInstanceFile(files?.solutions);
       handleFile(files?.solutions);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,8 +125,8 @@ function ChooseFiles({
 
     if (order_id) {
       setsearchOrder(order_id);
-      // searchById(order_id)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -149,7 +144,7 @@ function ChooseFiles({
         open={open}
       />
       <div className="chooseFiles">
-        {alignment == "question" ? (
+        {alignment === "question" ? (
           files?.questions?.map((file) => (
             <span
               disabled

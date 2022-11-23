@@ -35,7 +35,6 @@ export default function UpdateOrderModal({
   selectedOrderId,
   subjectId,
   handleClose,
-  handleOpen,
   open,
 }) {
   const [type, setType] = useState("");
@@ -48,11 +47,6 @@ export default function UpdateOrderModal({
   const handleChange = (event) => {
     setType(event.target.value);
   };
-  const handleSubject = (event) => {
-    setSubject(event.target.value);
-  };
-
-  const UpdateData = () => {};
 
   const getSubjectData = (params = "ana") => {
     setSubject(params);
