@@ -14,7 +14,7 @@ function ChooseFiles({
 }) {
   const [selectedFile, setSelectedFile] = useState();
   const [searchOrder, setsearchOrder] = useState();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

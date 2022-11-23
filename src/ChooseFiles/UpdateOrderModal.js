@@ -41,6 +41,7 @@ export default function UpdateOrderModal({
   const [Subject, setSubject] = useState("");
   const [Date, setDate] = useState();
   const [subjectData, setSubjectData] = useState([]);
+  const [submittingSubjectData, setSubmittingSubjectData] = useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
 
   const handleChange = (event) => {
@@ -61,7 +62,9 @@ export default function UpdateOrderModal({
         );
         setSubjectData(tempdata);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -77,13 +80,18 @@ export default function UpdateOrderModal({
         name: Subject?.label,
       },
     };
+    setSubmittingSubjectData(true);
     axios
       .put(BASE_URL + "orders/" + selectedOrderId, body)
       .then((res) => {
+        setSubmittingSubjectData(false);
         handleClose();
         setSnackOpen(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setSubmittingSubjectData(false);
+        console.log(err);
+      });
   };
 
   const handleSnackClose = (event, reason) => {
@@ -154,7 +162,7 @@ export default function UpdateOrderModal({
               className="resultViewer__save"
               onClick={saveModalData}
             >
-              Save
+              {submittingSubjectData ? "Saving..." : "Save"}
             </Button>
           </Stack>
         </Box>

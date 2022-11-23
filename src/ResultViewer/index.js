@@ -23,7 +23,9 @@ function ResultViewer({
   const [snackOpen, setSnackOpen] = useState(false);
   const [OCROutputData, setOCROutputData] = useState("");
   const [OCRImage, setOCRImage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingOCRData, setLoadingOCRData] = useState(false);
+  const [savingOCROutputData, setSavingOCROutputData] = useState(false);
+  const [savingQuestionData, setSavingQuestionData] = useState(false);
   const [figsList, setFigsList] = useState([]);
   const [solutionFigsList, setSolutionsFigList] = useState([]);
   const [selectedFig, setSelectedFig] = useState(null);
@@ -71,7 +73,7 @@ function ResultViewer({
   };
 
   const getOCRData = () => {
-    setLoading(true);
+    setLoadingOCRData(true);
     const formData = new FormData();
     formData.append("file", OCRImage);
     axios
@@ -82,10 +84,11 @@ function ResultViewer({
       })
       .then((res) => {
         setOCROutputData(res.data.data);
-        setLoading(false);
+        setLoadingOCRData(false);
       })
       .catch((err) => {
-        setLoading(false);
+        setLoadingOCRData(false);
+        console.log(err);
       });
   };
 
@@ -113,7 +116,7 @@ function ResultViewer({
     }
     let formData = new FormData();
     formData.append("file", OCRImage);
-
+    setSavingOCROutputData(true);
     axios
       .post(BASE_URL + "output/photo-url", formData, {
         headers: {
@@ -121,6 +124,7 @@ function ResultViewer({
         },
       })
       .then((res) => {
+        setSavingOCROutputData(false);
         alignment === "question"
           ? setImgURLList([...imgURLList, res.data.data])
           : setSolutionImgUrlList([...imgURLList, res.data.data]);
@@ -128,7 +132,10 @@ function ResultViewer({
         setOpen(false);
         setOCROutputData("");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setSavingOCROutputData(false);
+        console.log(err);
+      });
   };
 
   function getSavedQuestionData() {
@@ -216,13 +223,18 @@ function ResultViewer({
       fileUrl: "",
     };
 
+    setSavingQuestionData(true);
     axios
       .post(BASE_URL + "question-meta-data", record)
       .then((res) => {
+        setSavingQuestionData(false);
         setSnackOpen(true);
         resetStateHandler();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setSavingQuestionData(false);
+        console.log(err);
+      });
 
     let curr_qno = currQuestionData?.questionNumber + 1;
 
@@ -361,10 +373,11 @@ function ResultViewer({
         handleClose={handleClose}
         previewImage={previewImage}
         handleSave={handleSave}
+        loadingOCRData={loadingOCRData}
+        savingOCROutputData={savingOCROutputData}
         OCROutputData={OCROutputData}
         setOCROutputData={OCROutputData}
         getOCRData={getOCRData}
-        loading={loading}
       />
       <FigModal
         open={figModalOpen}
@@ -459,7 +472,7 @@ function ResultViewer({
             className="resultViewer__save"
             onClick={handleSaveQuestionData}
           >
-            Save
+            {savingQuestionData ? "Saving..." : "Save"}
           </Button>
           <Button
             variant="contained"

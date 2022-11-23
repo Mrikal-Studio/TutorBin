@@ -18,10 +18,11 @@ function PreviewModal({
   handleClose,
   previewImage,
   handleSave,
+  savingOCROutputData,
   OCROutputData,
   setOCROutputData,
   getOCRData,
-  loading,
+  loadingOCRData,
 }) {
   return (
     <Modal open={open} onClose={handleClose} disableEscapeKeyDown>
@@ -29,7 +30,7 @@ function PreviewModal({
         <Stack spacing={2}>
           <p className="resultViewer__header">Preview Image</p>
           <img src={previewImage} alt="preview__image" />
-          {loading ? (
+          {loadingOCRData ? (
             <Box
               sx={{
                 display: "flex",
@@ -69,7 +70,7 @@ function PreviewModal({
               className="resultViewer__save"
               onClick={handleSave}
             >
-              Save
+              {savingOCROutputData ? "Saving..." : "Save"}
             </Button>
           </Stack>
         </Stack>

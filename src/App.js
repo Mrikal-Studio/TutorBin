@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import ChooseFiles from "./ChooseFiles";
+import Header from "./Header.js";
+import Loader from ".././src/Loader/index";
 import PDFViewer from "./PDFViewer";
 import ResultViewer from "./ResultViewer";
-
+import Loader from "../src/Loader/index";
 function App() {
   const [viewerInstance, setViewerInstance] = useState();
   const [files, setFiles] = useState({});
+  const [loadingFiles, setLoadingFiles] = useState(false);
   const [selectedFileData, setSelectedFileData] = useState({});
   const [alignment, setAlignment] = useState("question");
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSelectInstanceFile = (file) => {
     viewerInstance.UI.loadDocument(file);
@@ -23,6 +27,10 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewerInstance, selectedFileData]);
 
+  if (!isLoading) {
+    return <Loader />;
+  }
+
   return (
     <div className="app">
       <ChooseFiles
@@ -32,16 +40,22 @@ function App() {
         setSelectedFileData={setSelectedFileData}
         selectedFileData={selectedFileData}
         alignment={alignment}
+        loadingFiles={loadingFiles}
+        setLoadingFiles={setLoadingFiles}
       />
-      <div className="container">
-        <PDFViewer setViewerInstance={setViewerInstance} />
-        <ResultViewer
-          orderFile={files}
-          selectedFileData={selectedFileData}
-          alignment={alignment}
-          setAlignment={setAlignment}
-        />
-      </div>
+      {loadingFiles ? (
+        <Loader />
+      ) : (
+        <div className="container">
+          <PDFViewer setViewerInstance={setViewerInstance} />
+          <ResultViewer
+            orderFile={files}
+            selectedFileData={selectedFileData}
+            alignment={alignment}
+            setAlignment={setAlignment}
+          />
+        </div>
+      )}
     </div>
   );
 }
