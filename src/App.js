@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import ChooseFiles from "./ChooseFiles";
-import Header from "./Header.js";
 import Loader from ".././src/Loader/index";
 import PDFViewer from "./PDFViewer";
 import ResultViewer from "./ResultViewer";
-import Loader from "../src/Loader/index";
+
 function App() {
   const [viewerInstance, setViewerInstance] = useState();
   const [files, setFiles] = useState({});
