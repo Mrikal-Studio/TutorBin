@@ -16,7 +16,6 @@
 .searchBar {
   background-color: #fffc !important;
   height: 24px !important;
-  /* max-height: 20px !important; */
   padding: 1rem;
 }
 .searchBar:active {

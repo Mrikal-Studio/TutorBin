@@ -11,7 +11,6 @@ import React, { useState } from "react";
 import { BASE_URL } from "../api";
 import "./Header.css";
 import SearchIcon from "@mui/icons-material/Search";
-import TextField from "@mui/material/TextField";
 import OutlinedInput from "@mui/material/OutlinedInput";
 
 function Header({ selectedOrderId, getFiles, setsearchOrder }) {
@@ -46,8 +45,6 @@ function Header({ selectedOrderId, getFiles, setsearchOrder }) {
     getFiles();
   };
 
-  const getNewOrder = () => {};
-
   return (
     <div>
       <div className="header">
@@ -67,7 +64,9 @@ function Header({ selectedOrderId, getFiles, setsearchOrder }) {
         </Snackbar>
         <div>
           <img
-            className="logo"
+            alt="logo"
+            width="128"
+            height="35"
             src="https://static.tutorbin.com/static/logo/tblogo-new.png"
           ></img>
         </div>
@@ -75,9 +74,6 @@ function Header({ selectedOrderId, getFiles, setsearchOrder }) {
           <p style={{ fontSize: "0.9rem", fontWeight: "500" }}>
             Order No. {selectedOrderId}
           </p>
-          {/* <Button variant="contained" className="header__getLatestOrder">
-          Get New Order
-        </Button> */}
           <Button
             style={{
               fontSize: "0.8rem",
