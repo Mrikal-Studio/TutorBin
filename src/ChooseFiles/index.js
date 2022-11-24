@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../api";
 import Header from "../Header.js";
 import "./ChooseFiles.css";
+import FileTab from "./FileTab";
 import UpdateOrderModal from "./UpdateOrderModal";
 
 function ChooseFiles({
@@ -73,51 +74,12 @@ function ChooseFiles({
       setSelectedFile(files?.questions[0]?._id);
       setSelectedFileData(files?.questions[0]);
     } else {
-      if (!files?.solutions) return;
-      handleFile(files?.solutions);
+      if (!files?.tasks[0]?.assigned[0]?.solutions) return;
+      console.log(files?.tasks[0]?.assigned[0]?.solutions, "solutions");
+      handleFile(files?.tasks[0]?.assigned[0]?.solutions[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alignment, files]);
-
-  const getBackground = (file) => {
-    if (file.hasOwnProperty("status")) {
-      if (file?.status === "completed") {
-        return "#4BB543";
-      } else {
-        if (selectedFile === file?._id) {
-          return "#00A5E4";
-        } else {
-          return "white";
-        }
-      }
-    } else {
-      if (selectedFile === file?._id) {
-        return "#00A5E4";
-      } else {
-        return "white";
-      }
-    }
-  };
-
-  const getColor = (file) => {
-    if (file.hasOwnProperty("status")) {
-      if (file?.status === "completed") {
-        return "#fff";
-      } else {
-        if (selectedFile === file?._id) {
-          return "white";
-        } else {
-          return "#00A5E4";
-        }
-      }
-    } else {
-      if (selectedFile === file?._id) {
-        return "white";
-      } else {
-        return "#00A5E4";
-      }
-    }
-  };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -144,55 +106,37 @@ function ChooseFiles({
         open={open}
       />
       <div className="chooseFiles">
-        {alignment === "question" ? (
-          files?.questions?.map((file) => (
-            <span
-              disabled
-              className="file"
-              id="file"
-              key={file._id}
-              onClick={() => {
-                if (file?.status === "completed") {
-                  return;
-                }
-                handleFile(file);
-              }}
-              style={{
-                border:
-                  file?.status === "completed"
-                    ? "1.2px solid #4BB543"
-                    : "1.2px solid #1C84FF",
-                background: getBackground(file),
-                color: getColor(file),
-              }}
-            >
-              {file.fileName}
-            </span>
-          ))
-        ) : files?.solutions ? (
-          <span
-            disabled
-            className="file"
-            id="file"
-            key={files?.solutions._id}
-            onClick={() => {
-              if (files?.solutions?.status === "completed") {
-                return;
-              }
-              handleFile(files?.solutions);
-            }}
-            style={{
-              border:
-                files?.solutions?.status === "completed"
-                  ? "1.2px solid #4BB543"
-                  : "1.2px solid #1C84FF",
-              background: getBackground(files?.solutions),
-              color: getColor(files?.solutions),
-            }}
-          >
-            {files?.solutions.filname}
-          </span>
-        ) : null}
+        {alignment === "question"
+          ? files?.questions?.map((file) => (
+              <FileTab
+                selectedFile={selectedFile}
+                key={file._id}
+                handleFile={handleFile}
+                file={file}
+              />
+            ))
+          : files?.tasks[0]?.assigned[0]?.solutions
+          ? files?.tasks[0]?.assigned[0]?.solutions?.map((file) =>
+              !file?.isDeleted ? (
+                <span
+                  disabled
+                  className="file"
+                  id="solution_file"
+                  key={file._id}
+                  onClick={() => {
+                    handleFile(file);
+                  }}
+                  style={{
+                    border: "1.2px solid #1C84FF",
+                    background: "#fff",
+                    color: "#1C84FF",
+                  }}
+                >
+                  {file.fileName}
+                </span>
+              ) : null
+            )
+          : null}
       </div>
     </>
   );
