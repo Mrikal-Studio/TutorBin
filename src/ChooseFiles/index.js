@@ -2,7 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../api";
 import Header from "../Header.js";
+import { supportedFiles } from "../utils/supportedFile";
 import "./ChooseFiles.css";
+import FileSupportedDialog from "./FileSupportedDialog";
 import FileTab from "./FileTab";
 import UpdateOrderModal from "./UpdateOrderModal";
 
@@ -16,9 +18,18 @@ function ChooseFiles({
   const [selectedFile, setSelectedFile] = useState();
   const [searchOrder, setsearchOrder] = useState();
   const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
 
   const handleFile = (file) => {
     handleSelectInstanceFile(file.fileUrl);
@@ -33,6 +44,10 @@ function ChooseFiles({
         setFiles(res?.data?.data);
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
+        let format = res?.data?.data?.questions[0]?.fileName.split(".").pop();
+        if (!supportedFiles?.includes(format)) {
+          handleDialogOpen();
+        }
         if (
           !(
             res?.data?.data?.questions.some((data) => data.status) &&
@@ -52,6 +67,10 @@ function ChooseFiles({
       .get(BASE_URL + `orders/?order_id=${searchOrder}`)
       .then((res) => {
         setFiles(res?.data?.data);
+        let format = res?.data?.data?.questions[0]?.fileName.split(".").pop();
+        if (!supportedFiles?.includes(format)) {
+          handleDialogOpen();
+        }
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
         setsearchOrder();
@@ -73,6 +92,12 @@ function ChooseFiles({
       setSelectedFileData(files?.questions[0]);
     } else {
       if (!files?.tasks[0]?.assigned[0]?.solutions) return;
+      let format = files?.tasks[0]?.assigned[0]?.solutions[0]?.fileName
+        ?.split(".")
+        .pop();
+      if (!supportedFiles?.includes(format)) {
+        handleDialogOpen();
+      }
       handleFile(files?.tasks[0]?.assigned[0]?.solutions[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,6 +127,7 @@ function ChooseFiles({
         handleOpen={handleOpen}
         open={open}
       />
+      <FileSupportedDialog handleClose={handleDialogClose} open={dialogOpen} />
       <div className="chooseFiles">
         {alignment === "question"
           ? files?.questions?.map((file) => (
@@ -110,6 +136,7 @@ function ChooseFiles({
                 key={file._id}
                 handleFile={handleFile}
                 file={file}
+                handleDialogOpen={handleDialogOpen}
               />
             ))
           : files?.tasks[0]?.assigned[0]?.solutions
@@ -121,6 +148,10 @@ function ChooseFiles({
                   id="solution_file"
                   key={file._id}
                   onClick={() => {
+                    let format = file?.fileName.split(".").pop();
+                    if (!supportedFiles?.includes(format)) {
+                      handleDialogOpen();
+                    }
                     handleFile(file);
                   }}
                   style={{
