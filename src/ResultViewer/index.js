@@ -316,8 +316,6 @@ function ResultViewer({
     );
   };
 
-
-
   const openNextQuestion = () => {
     if (currQuestionNumber === savedQuestionsData.length - 1) {
       resetStateHandler();
@@ -462,13 +460,15 @@ function ResultViewer({
           direction="row"
           className="resultviewer__finalAction"
         >
-          <Button
-            variant="contained"
-            className="resultViewer__save"
-            onClick={openPrevQuestion}
-          >
-            Back
-          </Button>
+          {currQuestionNumber !== 0 ? (
+            <Button
+              variant="contained"
+              className="resultViewer__save"
+              onClick={openPrevQuestion}
+            >
+              Back
+            </Button>
+          ) : null}
           <Button
             variant="contained"
             className="resultViewer__save"
@@ -476,13 +476,15 @@ function ResultViewer({
           >
             {savingQuestionData ? "Saving..." : "Save"}
           </Button>
-          <Button
-            variant="contained"
-            className="resultViewer__save"
-            onClick={openNextQuestion}
-          >
-            Skip
-          </Button>
+          {!(currQuestionNumber === savedQuestionsData.length - 1) ? (
+            <Button
+              variant="contained"
+              className="resultViewer__save"
+              onClick={openNextQuestion}
+            >
+              Skip
+            </Button>
+          ) : null}
         </Stack>
       </Card>
     </div>
