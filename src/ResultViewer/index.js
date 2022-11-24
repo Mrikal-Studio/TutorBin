@@ -156,6 +156,7 @@ function ResultViewer({
           setSavedQuestionsData([...x, y]);
           setCurrentQuestionNumber(x.length);
           // setText({ ...text, question: x[x.length - 1]?.text });
+          setText({ ...text, question: "" });
           setCurentQuestionData(y);
           setSelectedOptions({
             type: "",
