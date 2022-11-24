@@ -32,7 +32,6 @@ function Header({ selectedOrderId, getFiles, setsearchOrder }) {
       .put(BASE_URL + "orders/complete/" + selectedOrderId)
       .then((res) => {
         setIsCompletingOrder(false);
-        console.log(res);
         setSnackOpen(true);
       })
       .catch((err) => {

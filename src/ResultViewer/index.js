@@ -93,27 +93,6 @@ function ResultViewer({
   };
 
   const handleSave = () => {
-    if (alignment === "question") {
-      setFigsList([
-        ...figsList,
-        {
-          id: figsList.length,
-          file: OCRImage,
-          imageURI: URL.createObjectURL(OCRImage),
-          questionType: 0,
-        },
-      ]);
-    } else {
-      setSolutionsFigList([
-        ...solutionFigsList,
-        {
-          id: solutionFigsList.length,
-          file: OCRImage,
-          imageURI: URL.createObjectURL(OCRImage),
-          questionType: 0,
-        },
-      ]);
-    }
     let formData = new FormData();
     formData.append("file", OCRImage);
     setSavingOCROutputData(true);
@@ -125,6 +104,27 @@ function ResultViewer({
       })
       .then((res) => {
         setSavingOCROutputData(false);
+        if (alignment === "question") {
+          setFigsList([
+            ...figsList,
+            {
+              id: figsList.length,
+              file: OCRImage,
+              imageURI: URL.createObjectURL(OCRImage),
+              questionType: 0,
+            },
+          ]);
+        } else {
+          setSolutionsFigList([
+            ...solutionFigsList,
+            {
+              id: solutionFigsList.length,
+              file: OCRImage,
+              imageURI: URL.createObjectURL(OCRImage),
+              questionType: 0,
+            },
+          ]);
+        }
         alignment === "question"
           ? setImgURLList([...imgURLList, res.data.data])
           : setSolutionImgUrlList([...imgURLList, res.data.data]);
@@ -264,7 +264,6 @@ function ResultViewer({
     });
   };
 
-  console.log("ydrfytguhijlkigy", savedQuestionsData);
   const getPriceModelData = () => {
     axios
       .post(BASE_URL + "pricemodel/" + "63293d39a0e7afd2bf68f555")
@@ -461,13 +460,15 @@ function ResultViewer({
           direction="row"
           className="resultviewer__finalAction"
         >
-          <Button
-            variant="contained"
-            className="resultViewer__save"
-            onClick={openPrevQuestion}
-          >
-            Back
-          </Button>
+          {currQuestionNumber !== 0 ? (
+            <Button
+              variant="contained"
+              className="resultViewer__save"
+              onClick={openPrevQuestion}
+            >
+              Back
+            </Button>
+          ) : null}
           <Button
             variant="contained"
             className="resultViewer__save"
@@ -475,13 +476,15 @@ function ResultViewer({
           >
             {savingQuestionData ? "Saving..." : "Save"}
           </Button>
-          <Button
-            variant="contained"
-            className="resultViewer__save"
-            onClick={openNextQuestion}
-          >
-            Skip
-          </Button>
+          {!(currQuestionNumber === savedQuestionsData.length - 1) ? (
+            <Button
+              variant="contained"
+              className="resultViewer__save"
+              onClick={openNextQuestion}
+            >
+              Skip
+            </Button>
+          ) : null}
         </Stack>
       </Card>
     </div>
