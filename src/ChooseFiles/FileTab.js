@@ -1,6 +1,7 @@
 import React from "react";
+import { supportedFiles } from "../utils/supportedFile";
 
-function FileTab({ file, handleFile, selectedFile }) {
+function FileTab({ file, handleFile, selectedFile, handleDialogOpen }) {
   const getBackground = (file) => {
     if (file.hasOwnProperty("status")) {
       if (file?.status === "completed") {
@@ -46,6 +47,10 @@ function FileTab({ file, handleFile, selectedFile }) {
       className="file"
       key={file?._id}
       onClick={() => {
+        let format = file?.fileName.split(".").pop();
+        if (!supportedFiles?.includes(format)) {
+          handleDialogOpen();
+        }
         if (file?.status === "completed") {
           return;
         }
