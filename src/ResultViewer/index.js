@@ -93,27 +93,6 @@ function ResultViewer({
   };
 
   const handleSave = () => {
-    if (alignment === "question") {
-      setFigsList([
-        ...figsList,
-        {
-          id: figsList.length,
-          file: OCRImage,
-          imageURI: URL.createObjectURL(OCRImage),
-          questionType: 0,
-        },
-      ]);
-    } else {
-      setSolutionsFigList([
-        ...solutionFigsList,
-        {
-          id: solutionFigsList.length,
-          file: OCRImage,
-          imageURI: URL.createObjectURL(OCRImage),
-          questionType: 0,
-        },
-      ]);
-    }
     let formData = new FormData();
     formData.append("file", OCRImage);
     setSavingOCROutputData(true);
@@ -125,6 +104,27 @@ function ResultViewer({
       })
       .then((res) => {
         setSavingOCROutputData(false);
+        if (alignment === "question") {
+          setFigsList([
+            ...figsList,
+            {
+              id: figsList.length,
+              file: OCRImage,
+              imageURI: URL.createObjectURL(OCRImage),
+              questionType: 0,
+            },
+          ]);
+        } else {
+          setSolutionsFigList([
+            ...solutionFigsList,
+            {
+              id: solutionFigsList.length,
+              file: OCRImage,
+              imageURI: URL.createObjectURL(OCRImage),
+              questionType: 0,
+            },
+          ]);
+        }
         alignment === "question"
           ? setImgURLList([...imgURLList, res.data.data])
           : setSolutionImgUrlList([...imgURLList, res.data.data]);
