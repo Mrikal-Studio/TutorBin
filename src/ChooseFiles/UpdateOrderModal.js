@@ -39,14 +39,17 @@ export default function UpdateOrderModal({
 }) {
   const [type, setType] = useState("");
   const [Subject, setSubject] = useState("");
-  const [Date, setDate] = useState();
+  const [selectedSubject, setSelectedSubject] = useState({ label: null });
+  const [date, setDate] = useState();
   const [subjectData, setSubjectData] = useState([]);
   const [submittingSubjectData, setSubmittingSubjectData] = useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
-
+  const [order, setOrder] = useState();
+  const [questiontype, setQuestionType] = useState([]);
   const handleChange = (event) => {
     setType(event.target.value);
   };
+  console.log(subjectData);
 
   const getSubjectData = (params = "ana") => {
     setSubject(params);
@@ -66,17 +69,35 @@ export default function UpdateOrderModal({
       });
   };
 
+  const getOrdersData = (params = "ana") => {
+    fetch(BASE_URL + `orders/?search=${params}&page=1&limit=5`)
+      .then((res) => res.json())
+      .then((data) => {
+        setOrder(data);
+        setType(data.data.type);
+        setSelectedSubject({ label: data.data.subject?.name });
+        console.log(data, "orderData");
+
+        const orderDate = new Date(data.data.deadline);
+        const requiredFormat = `${orderDate.getUTCFullYear()}-${String(
+          orderDate.getUTCMonth() + 1
+        ).padStart(2, "0")}-${String(orderDate.getUTCDate()).padStart(2, "0")}`;
+        setDate(requiredFormat);
+      });
+  };
+
   useEffect(() => {
     getSubjectData();
+    getOrdersData();
   }, []);
 
   const saveModalData = () => {
     const body = {
       type: type,
-      deadline: Date,
+      deadline: date,
       subject: {
         id: subjectId,
-        name: Subject?.label,
+        name: selectedSubject?.label,
       },
     };
     setSubmittingSubjectData(true);
@@ -124,7 +145,7 @@ export default function UpdateOrderModal({
             <input
               type={"date"}
               onChange={(e) => setDate(e.target.value)}
-              value={Date}
+              value={date}
               className="custom__datefield"
             />
             <FormControl fullWidth>
@@ -137,18 +158,21 @@ export default function UpdateOrderModal({
                 ))}
               </Select>
             </FormControl>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={subjectData}
-              onChange={(event, newValue) => {
-                setSubject(newValue);
-              }}
-              onInputChange={(e) => getSubjectData(e.target.value)}
-              renderInput={(params) => (
-                <TextField {...params} label="Subject" />
-              )}
-            />
+            {subjectData ? (
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={subjectData}
+                value={selectedSubject?.label}
+                onChange={(event, newValue) => {
+                  setSelectedSubject(newValue);
+                }}
+                onInputChange={(e) => getSubjectData(e?.target.value)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Subject" />
+                )}
+              />
+            ) : null}
           </Stack>
           <Stack
             spacing={2}
