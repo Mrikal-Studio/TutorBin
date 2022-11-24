@@ -161,8 +161,9 @@ function ChooseFiles({
                   }}
                   style={{
                     border: "1.2px solid #1C84FF",
-                    background: "#fff",
-                    color: "#1C84FF",
+                    background:
+                      selectedFile === file?._id ? "#00A5E4" : "white",
+                    color: selectedFile === file?._id ? "white" : "#00A5E4",
                   }}
                 >
                   {file.fileName}
