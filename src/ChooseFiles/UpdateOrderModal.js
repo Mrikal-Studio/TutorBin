@@ -54,7 +54,6 @@ export default function UpdateOrderModal({
     axios
       .get(BASE_URL + `subjects?search=${params}&page=1&limit=5`)
       .then((res) => {
-        console.log(res?.data?.data, "subject get");
         res?.data?.data?.map((subject) =>
           tempdata.push({
             label: subject?.name,

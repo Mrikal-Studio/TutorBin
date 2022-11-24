@@ -264,7 +264,6 @@ function ResultViewer({
     });
   };
 
-  console.log("ydrfytguhijlkigy", savedQuestionsData);
   const getPriceModelData = () => {
     axios
       .post(BASE_URL + "pricemodel/" + "63293d39a0e7afd2bf68f555")
@@ -316,6 +315,8 @@ function ResultViewer({
       savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
     );
   };
+
+
 
   const openNextQuestion = () => {
     if (currQuestionNumber === savedQuestionsData.length - 1) {

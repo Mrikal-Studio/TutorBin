@@ -30,7 +30,6 @@ function ChooseFiles({
     axios
       .get(BASE_URL + "orders/")
       .then((res) => {
-        console.log("orderedFile", res?.data?.data, "1");
         setFiles(res?.data?.data);
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
@@ -52,7 +51,6 @@ function ChooseFiles({
     axios
       .get(BASE_URL + `orders/?order_id=${searchOrder}`)
       .then((res) => {
-        console.log("res of the order by ID", res);
         setFiles(res?.data?.data);
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
@@ -75,7 +73,6 @@ function ChooseFiles({
       setSelectedFileData(files?.questions[0]);
     } else {
       if (!files?.tasks[0]?.assigned[0]?.solutions) return;
-      console.log(files?.tasks[0]?.assigned[0]?.solutions, "solutions");
       handleFile(files?.tasks[0]?.assigned[0]?.solutions[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

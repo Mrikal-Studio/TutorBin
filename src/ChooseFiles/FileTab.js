@@ -46,7 +46,6 @@ function FileTab({ file, handleFile, selectedFile }) {
       className="file"
       key={file?._id}
       onClick={() => {
-        console.log(file?.fileName, "questionFile");
         if (file?.status === "completed") {
           return;
         }
