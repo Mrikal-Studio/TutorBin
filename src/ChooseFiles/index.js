@@ -14,6 +14,7 @@ function ChooseFiles({
   setFiles,
   files,
   alignment,
+  selectedFileData,
 }) {
   const [selectedFile, setSelectedFile] = useState();
   const [searchOrder, setsearchOrder] = useState();
@@ -127,7 +128,11 @@ function ChooseFiles({
         handleOpen={handleOpen}
         open={open}
       />
-      <FileSupportedDialog handleClose={handleDialogClose} open={dialogOpen} />
+      <FileSupportedDialog
+        handleClose={handleDialogClose}
+        open={dialogOpen}
+        selectedFileData={selectedFileData}
+      />
       <div className="chooseFiles">
         {alignment === "question"
           ? files?.questions?.map((file) => (
