@@ -155,7 +155,7 @@ function ResultViewer({
           };
           setSavedQuestionsData([...x, y]);
           setCurrentQuestionNumber(x.length);
-          setText({ ...text, question: x[x.length - 1]?.text });
+          // setText({ ...text, question: x[x.length - 1]?.text });
           setCurentQuestionData(y);
           setSelectedOptions({
             type: "",
@@ -187,7 +187,7 @@ function ResultViewer({
   }, []);
 
   const resetStateHandler = () => {
-    setText({ question: "", solution: "" });
+    setText({ ...text, question: "", solution: "" });
     setSelectedOptions({
       type: "",
       difficulty: "",
@@ -292,15 +292,20 @@ function ResultViewer({
   }, []);
 
   const openPrevQuestion = () => {
-    if (currQuestionNumber === 0) {
-      return;
-    }
+    // if (currQuestionNumber === 0) {
+    //   return;
+    // }
     setCurentQuestionData(savedQuestionsData[currQuestionNumber - 1]);
+
     setCurrentQuestionNumber(currQuestionNumber - 1);
     setText({
       ...text,
-      question: savedQuestionsData[currQuestionNumber - 1]?.text,
-      solution: savedQuestionsData[currQuestionNumber - 1]?.solutions?.text,
+      question: savedQuestionsData[currQuestionNumber - 1]?.text
+        ? savedQuestionsData[currQuestionNumber - 1]?.text
+        : "",
+      solution: savedQuestionsData[currQuestionNumber - 1]?.solutions?.text
+        ? savedQuestionsData[currQuestionNumber - 1]?.solutions?.text
+        : "",
     });
     setSelectedOptions({
       type: savedQuestionsData[currQuestionNumber - 1]?.type,
@@ -324,8 +329,12 @@ function ResultViewer({
     setCurentQuestionData(savedQuestionsData[currQuestionNumber + 1]);
     setText({
       ...text,
-      question: savedQuestionsData[currQuestionNumber + 1]?.text,
-      solution: savedQuestionsData[currQuestionNumber - 1]?.solutions?.text,
+      question: savedQuestionsData[currQuestionNumber + 1]?.text
+        ? savedQuestionsData[currQuestionNumber + 1]?.text
+        : "",
+      solution: savedQuestionsData[currQuestionNumber + 1]?.solutions?.text
+        ? savedQuestionsData[currQuestionNumber + 1]?.solutions?.text
+        : "",
     });
 
     setCurrentQuestionNumber(currQuestionNumber + 1);
@@ -389,7 +398,8 @@ function ResultViewer({
         <div className="resultViewer__cardHeader">
           <ToggleTab alignment={alignment} setAlignment={setAlignment} />
           <p className="resultViewer__dataNumber">
-            Question {currQuestionNumber + 1}
+            {alignment === "question" ? "Question No." : "Solution No."}{" "}
+            {currQuestionNumber + 1}
           </p>
         </div>
         <p>Paste selected text below</p>
