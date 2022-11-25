@@ -37,19 +37,18 @@ export default function UpdateOrderModal({
   handleClose,
   open,
 }) {
+  const [typeData, setTypeData] = useState(QUESTION_TYPE);
   const [type, setType] = useState("");
-  const [Subject, setSubject] = useState("");
-  const [Date, setDate] = useState();
+  const [selectedSubject, setSelectedSubject] = useState({ label: null });
+  const [date, setDate] = useState();
   const [subjectData, setSubjectData] = useState([]);
   const [submittingSubjectData, setSubmittingSubjectData] = useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
-
   const handleChange = (event) => {
     setType(event.target.value);
   };
 
   const getSubjectData = (params = "ana") => {
-    setSubject(params);
     let tempdata = [];
     axios
       .get(BASE_URL + `subjects?search=${params}&page=1&limit=5`)
@@ -66,17 +65,34 @@ export default function UpdateOrderModal({
       });
   };
 
+  const getOrdersData = (params = "ana") => {
+    fetch(BASE_URL + `orders/?search=${params}&page=1&limit=5`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTypeData([...typeData, data.data.type]);
+        setType(data.data.type);
+        setSelectedSubject({ label: data.data.subject?.name });
+
+        const orderDate = new Date(data.data.deadline);
+        const requiredFormat = `${orderDate.getUTCFullYear()}-${String(
+          orderDate.getUTCMonth() + 1
+        ).padStart(2, "0")}-${String(orderDate.getUTCDate()).padStart(2, "0")}`;
+        setDate(requiredFormat);
+      });
+  };
+
   useEffect(() => {
     getSubjectData();
+    getOrdersData();
   }, []);
 
   const saveModalData = () => {
     const body = {
       type: type,
-      deadline: Date,
+      deadline: date,
       subject: {
         id: subjectId,
-        name: Subject?.label,
+        name: selectedSubject?.label,
       },
     };
     setSubmittingSubjectData(true);
@@ -124,31 +140,34 @@ export default function UpdateOrderModal({
             <input
               type={"date"}
               onChange={(e) => setDate(e.target.value)}
-              value={Date}
+              value={date}
               className="custom__datefield"
             />
             <FormControl fullWidth>
               <InputLabel>Type</InputLabel>
               <Select value={type} label="Type" onChange={handleChange}>
-                {QUESTION_TYPE?.map((data, idx) => (
+                {typeData?.map((data, idx) => (
                   <MenuItem value={data} key={idx} defaultValue="essay">
                     {data}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={subjectData}
-              onChange={(event, newValue) => {
-                setSubject(newValue);
-              }}
-              onInputChange={(e) => getSubjectData(e.target.value)}
-              renderInput={(params) => (
-                <TextField {...params} label="Subject" />
-              )}
-            />
+            {subjectData ? (
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={subjectData}
+                value={selectedSubject?.label}
+                onChange={(event, newValue) => {
+                  setSelectedSubject(newValue);
+                }}
+                onInputChange={(e) => getSubjectData(e?.target.value)}
+                renderInput={(params) => (
+                  <TextField {...params} label="Subject" />
+                )}
+              />
+            ) : null}
           </Stack>
           <Stack
             spacing={2}
