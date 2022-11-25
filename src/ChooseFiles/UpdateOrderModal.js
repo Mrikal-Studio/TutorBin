@@ -37,22 +37,18 @@ export default function UpdateOrderModal({
   handleClose,
   open,
 }) {
+  const [typeData, setTypeData] = useState(QUESTION_TYPE);
   const [type, setType] = useState("");
-  const [Subject, setSubject] = useState("");
   const [selectedSubject, setSelectedSubject] = useState({ label: null });
   const [date, setDate] = useState();
   const [subjectData, setSubjectData] = useState([]);
   const [submittingSubjectData, setSubmittingSubjectData] = useState(false);
   const [snackOpen, setSnackOpen] = useState(false);
-  const [order, setOrder] = useState();
-  const [questiontype, setQuestionType] = useState([]);
   const handleChange = (event) => {
     setType(event.target.value);
   };
-  console.log(subjectData);
 
   const getSubjectData = (params = "ana") => {
-    setSubject(params);
     let tempdata = [];
     axios
       .get(BASE_URL + `subjects?search=${params}&page=1&limit=5`)
@@ -73,10 +69,9 @@ export default function UpdateOrderModal({
     fetch(BASE_URL + `orders/?search=${params}&page=1&limit=5`)
       .then((res) => res.json())
       .then((data) => {
-        setOrder(data);
+        setTypeData([...typeData, data.data.type]);
         setType(data.data.type);
         setSelectedSubject({ label: data.data.subject?.name });
-        console.log(data, "orderData");
 
         const orderDate = new Date(data.data.deadline);
         const requiredFormat = `${orderDate.getUTCFullYear()}-${String(
@@ -151,7 +146,7 @@ export default function UpdateOrderModal({
             <FormControl fullWidth>
               <InputLabel>Type</InputLabel>
               <Select value={type} label="Type" onChange={handleChange}>
-                {QUESTION_TYPE?.map((data, idx) => (
+                {typeData?.map((data, idx) => (
                   <MenuItem value={data} key={idx} defaultValue="essay">
                     {data}
                   </MenuItem>

@@ -72,6 +72,16 @@ function ChooseFiles({
         if (!supportedFiles?.includes(format)) {
           handleDialogOpen();
         }
+        if (
+          !(
+            res?.data?.data?.questions.some((data) => data.status) &&
+            res?.data?.data?.questions.some(
+              (data) => data.status === "completed"
+            )
+          )
+        ) {
+          handleOpen();
+        }
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
         setsearchOrder();
