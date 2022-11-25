@@ -54,6 +54,7 @@ function FileTab({ file, handleFile, selectedFile, handleDialogOpen }) {
         if (file?.status === "completed") {
           return;
         }
+        localStorage.setItem("incrementalId", file?.incrementalId);
         handleFile(file);
       }}
       style={{

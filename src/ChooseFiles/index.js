@@ -59,6 +59,12 @@ function ChooseFiles({
         ) {
           handleOpen();
         }
+
+        alignment === "question" &&
+          localStorage.setItem(
+            "incrementalId",
+            res?.data?.data?.questions[0]?.incrementalId
+          );
       })
       .catch((err) => console.log(err));
   };
@@ -82,6 +88,11 @@ function ChooseFiles({
         ) {
           handleOpen();
         }
+        alignment === "question" &&
+          localStorage.setItem(
+            "incrementalId",
+            res?.data?.data?.questions[0]?.incrementalId
+          );
         setSelectedFile(res?.data?.data?.questions[0]?._id);
         setSelectedFileData(res?.data?.data?.questions[0]);
         setsearchOrder();

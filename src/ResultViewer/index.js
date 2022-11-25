@@ -127,7 +127,7 @@ function ResultViewer({
         }
         alignment === "question"
           ? setImgURLList([...imgURLList, res.data.data])
-          : setSolutionImgUrlList([...imgURLList, res.data.data]);
+          : setSolutionImgUrlList([...solutionimgURLList, res.data.data]);
         setSnackOpen(true);
         setOpen(false);
         setOCROutputData("");
@@ -143,6 +143,7 @@ function ResultViewer({
       axios
         .get(BASE_URL + "question-meta-data/" + orderFile._id)
         .then((res) => {
+          console.log(res, "response for question-meta");
           let x = res?.data?.data.sort(
             (a, b) => a.questionNumber - b.questionNumber
           );
@@ -203,6 +204,7 @@ function ResultViewer({
     setSolutionsFigList([]);
   };
   const handleSaveQuestionData = () => {
+    console.log(orderFile, "orderFile");
     const record = {
       text: text.question,
       image: imgURLList,
@@ -212,7 +214,7 @@ function ResultViewer({
       lastQuestion: selectedOptions.lastQuestion,
       deadline: selectedOptions.deadline,
       orderId: orderFile._id,
-      incrementalId: currQuestionData?.incrementalId,
+      incrementalId: parseInt(localStorage.getItem("incrementalId")),
       subjectId: orderFile?.subject?.id,
       questionNumber: currQuestionData?.questionNumber
         ? currQuestionData?.questionNumber
