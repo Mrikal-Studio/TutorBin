@@ -139,9 +139,9 @@ function ResultViewer({
   };
 
   function getSavedQuestionData() {
-    if (orderFile._id)
+    if (orderFile.incrementalId)
       axios
-        .get(BASE_URL + "question-meta-data/" + orderFile._id)
+        .get(BASE_URL + "question-meta-data/" + orderFile.incrementalId)
         .then((res) => {
           console.log(res, "response for question-meta");
           let x = res?.data?.data.sort(
@@ -213,7 +213,7 @@ function ResultViewer({
       instruction: selectedOptions.instruction,
       lastQuestion: selectedOptions.lastQuestion,
       deadline: selectedOptions.deadline,
-      orderId: orderFile._id,
+      orderId: orderFile.incrementalId,
       incrementalId: parseInt(localStorage.getItem("incrementalId")),
       subjectId: orderFile?.subject?.id,
       questionNumber: currQuestionData?.questionNumber
