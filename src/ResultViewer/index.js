@@ -207,7 +207,6 @@ function ResultViewer({
     setSolutionsFigList([]);
   };
   const handleSaveQuestionData = () => {
-    console.log(orderFile, "orderFile");
     const record = {
       text: text.question,
       image: imgURLList,
@@ -216,7 +215,7 @@ function ResultViewer({
       instruction: selectedOptions.instruction,
       lastQuestion: selectedOptions.lastQuestion,
       deadline: selectedOptions.deadline,
-      orderId: orderFile.incrementalId,
+      orderId: parseInt(orderFile?.incrementalId),
       incrementalId: parseInt(localStorage.getItem("incrementalId")),
       subjectId: orderFile?.subject?.id,
       questionNumber: currQuestionData?.questionNumber
@@ -227,7 +226,7 @@ function ResultViewer({
         images: solutionimgURLList,
         fileUrl: "",
       },
-      fileUrl: "",
+      fileUrl: selectedFileData?.fileUrl,
     };
 
     setSavingQuestionData(true);
@@ -237,37 +236,36 @@ function ResultViewer({
         setSavingQuestionData(false);
         setSnackOpen(true);
         resetStateHandler();
+        let curr_qno = currQuestionData?.questionNumber + 1;
+
+        let x = {
+          questionNumber: curr_qno,
+        };
+
+        let temp_arr = savedQuestionsData;
+        for (let i = 0; i < savedQuestionsData.length; i++) {
+          if (temp_arr[i].questionNumber === record.questionNumber)
+            temp_arr[i] = record;
+        }
+
+        setSavedQuestionsData([...temp_arr, x]);
+
+        setCurentQuestionData(x);
+        setText({ ...text, question: "" });
+        setCurrentQuestionNumber(currQuestionNumber + 1);
+        setSelectedOptions({
+          type: "",
+          difficulty: "",
+          category: "",
+          instruction: "",
+          deadline: "",
+          lastQuestion: "",
+        });
       })
       .catch((err) => {
         setSavingQuestionData(false);
         console.log(err);
       });
-
-    let curr_qno = currQuestionData?.questionNumber + 1;
-
-    let x = {
-      questionNumber: curr_qno,
-    };
-
-    let temp_arr = savedQuestionsData;
-    for (let i = 0; i < savedQuestionsData.length; i++) {
-      if (temp_arr[i].questionNumber === record.questionNumber)
-        temp_arr[i] = record;
-    }
-
-    setSavedQuestionsData([...temp_arr, x]);
-
-    setCurentQuestionData(x);
-    setText({ ...text, question: "" });
-    setCurrentQuestionNumber(currQuestionNumber + 1);
-    setSelectedOptions({
-      type: "",
-      difficulty: "",
-      category: "",
-      instruction: "",
-      deadline: "",
-      lastQuestion: "",
-    });
   };
 
   const getPriceModelData = () => {
