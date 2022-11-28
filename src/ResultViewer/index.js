@@ -454,12 +454,17 @@ function ResultViewer({
             ? figsList?.map((fig) => (
                 <div className="figsList">
                   <Stack spacing={1} alignItems="center">
-                    <div className="figsListClose">
-                      <CancelIcon
-                        className="figsList_closeIcon"
-                        onClick={() => handleFigListClose(fig.id)}
-                      />
-                    </div>
+                    {currQuestionNumber === savedQuestionsData.length - 1 ? (
+                      <div className="figsListClose">
+                        <CancelIcon
+                          className="figsList_closeIcon"
+                          onClick={() => handleFigListClose(fig.id)}
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+
                     <div>
                       <PermMediaIcon
                         key={fig.id}
@@ -474,12 +479,17 @@ function ResultViewer({
             : solutionFigsList?.map((fig) => (
                 <div>
                   <Stack spacing={1} alignItems="center">
-                    <div className="figsListClose">
-                      <CancelIcon
-                        className="figsList_closeIcon"
-                        onClick={() => handlesolutionFigListClose(fig.id)}
-                      />
-                    </div>
+                    {currQuestionNumber === savedQuestionsData.length - 1 ? (
+                      <div className="figsListClose">
+                        <CancelIcon
+                          className="figsList_closeIcon"
+                          onClick={() => handlesolutionFigListClose(fig.id)}
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+
                     <PermMediaIcon
                       key={fig.id}
                       className="resultViewer__figsIcon"
