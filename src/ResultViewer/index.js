@@ -94,6 +94,32 @@ function ResultViewer({
       })
       .then((res) => {
         setOCROutputData(res.data.data);
+        alignment === "question"
+          ? setText({ ...text, question: res.data.data })
+          : setText({ ...text, solution: res.data.data });
+        setLoadingOCRData(false);
+        setOpen(false);
+      })
+      .catch((err) => {
+        setLoadingOCRData(false);
+        console.log(err);
+      });
+  };
+
+  const getOCRToText = (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    axios
+      .post(BASE_URL + "output/text/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        setOCROutputData(res.data.data);
+        alignment === "question"
+          ? setText({ ...text, question: res.data.data })
+          : setText({ ...text, solution: res.data.data });
         setLoadingOCRData(false);
       })
       .catch((err) => {
@@ -201,10 +227,15 @@ function ResultViewer({
     const fileInput = document.getElementById("document_attachment_doc");
 
     window.addEventListener("paste", (e) => {
+      console.log(e.target, "on paste windows");
       fileInput.files = e.clipboardData.files;
       setPreviewImage(URL.createObjectURL(e.clipboardData.files[0]));
       setOCRImage(e.clipboardData.files[0]);
-      handleOpen();
+      if (e.target.id === "textOCR") {
+        getOCRToText(e.clipboardData.files[0]);
+      } else {
+        handleOpen();
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -391,6 +422,10 @@ function ResultViewer({
     }
   };
 
+  const handleAddOCRText = (e) => {
+    console.log(e.target.id, "imageeee");
+  };
+
   return (
     <div className="resultViewer">
       <Snackbar
@@ -436,12 +471,13 @@ function ResultViewer({
 
         {alignment === "question" ? (
           <textarea
-            id="text"
+            id="textOCR"
             name="text"
             value={text?.question}
             className="questionContainer__review"
             placeholder="You can paste here and view your text..."
             onChange={(e) => handleText(e)}
+            onPaste={(e) => handleAddOCRText(e)}
           ></textarea>
         ) : (
           <textarea
