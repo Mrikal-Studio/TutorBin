@@ -101,6 +101,20 @@
   transform: scale(1.02);
 }
 
+.figsList {
+  position: relative;
+}
+
+.figsListClose {
+  position: absolute;
+  cursor: pointer;
+}
+
+.figsList_closeIcon {
+  margin-left: 3.5rem;
+  font-size: 2rem;
+}
+
 .resultviewer__finalAction {
   margin-top: 1rem;
   margin-bottom: 3em;
