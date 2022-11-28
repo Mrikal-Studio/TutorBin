@@ -96,6 +96,7 @@ function ResultViewer({
     let formData = new FormData();
     formData.append("file", OCRImage);
     setSavingOCROutputData(true);
+    console.log(alignment, "alignment");
     axios
       .post(BASE_URL + "output/photo-url", formData, {
         headers: {
@@ -105,6 +106,7 @@ function ResultViewer({
       .then((res) => {
         setSavingOCROutputData(false);
         if (alignment === "question") {
+          console.log(figsList, "figsList");
           setFigsList([
             ...figsList,
             {
@@ -201,10 +203,10 @@ function ResultViewer({
     });
     setPreviewImage(null);
     setOCRImage(null);
+    setFigsList([]);
     setSolutionsFigList([]);
   };
   const handleSaveQuestionData = () => {
-    console.log(orderFile, "orderFile");
     const record = {
       text: text.question,
       image: imgURLList,
@@ -213,7 +215,7 @@ function ResultViewer({
       instruction: selectedOptions.instruction,
       lastQuestion: selectedOptions.lastQuestion,
       deadline: selectedOptions.deadline,
-      orderId: orderFile.incrementalId,
+      orderId: parseInt(orderFile?.incrementalId),
       incrementalId: parseInt(localStorage.getItem("incrementalId")),
       subjectId: orderFile?.subject?.id,
       questionNumber: currQuestionData?.questionNumber
@@ -224,7 +226,7 @@ function ResultViewer({
         images: solutionimgURLList,
         fileUrl: "",
       },
-      fileUrl: "",
+      fileUrl: selectedFileData?.fileUrl,
     };
 
     setSavingQuestionData(true);
@@ -234,37 +236,36 @@ function ResultViewer({
         setSavingQuestionData(false);
         setSnackOpen(true);
         resetStateHandler();
+        let curr_qno = currQuestionData?.questionNumber + 1;
+
+        let x = {
+          questionNumber: curr_qno,
+        };
+
+        let temp_arr = savedQuestionsData;
+        for (let i = 0; i < savedQuestionsData.length; i++) {
+          if (temp_arr[i].questionNumber === record.questionNumber)
+            temp_arr[i] = record;
+        }
+
+        setSavedQuestionsData([...temp_arr, x]);
+
+        setCurentQuestionData(x);
+        setText({ ...text, question: "" });
+        setCurrentQuestionNumber(currQuestionNumber + 1);
+        setSelectedOptions({
+          type: "",
+          difficulty: "",
+          category: "",
+          instruction: "",
+          deadline: "",
+          lastQuestion: "",
+        });
       })
       .catch((err) => {
         setSavingQuestionData(false);
         console.log(err);
       });
-
-    let curr_qno = currQuestionData?.questionNumber + 1;
-
-    let x = {
-      questionNumber: curr_qno,
-    };
-
-    let temp_arr = savedQuestionsData;
-    for (let i = 0; i < savedQuestionsData.length; i++) {
-      if (temp_arr[i].questionNumber === record.questionNumber)
-        temp_arr[i] = record;
-    }
-
-    setSavedQuestionsData([...temp_arr, x]);
-
-    setCurentQuestionData(x);
-    setText({ ...text, question: "" });
-    setCurrentQuestionNumber(currQuestionNumber + 1);
-    setSelectedOptions({
-      type: "",
-      difficulty: "",
-      category: "",
-      instruction: "",
-      deadline: "",
-      lastQuestion: "",
-    });
   };
 
   const getPriceModelData = () => {
@@ -350,10 +351,14 @@ function ResultViewer({
       deadline: savedQuestionsData[currQuestionNumber + 1]?.deadline || "",
       lastQuestion: savedQuestionsData[currQuestionNumber + 1]?.lastQuestion,
     });
-    setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
-    setSolutionsFigList(
-      savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
-    );
+    savedQuestionsData[currQuestionNumber + 1]?.image
+      ? setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image)
+      : setFigsList([]);
+    savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
+      ? setSolutionsFigList(
+          savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
+        )
+      : setSolutionsFigList([]);
   };
 
   const handleText = (e) => {
@@ -402,7 +407,7 @@ function ResultViewer({
           <ToggleTab alignment={alignment} setAlignment={setAlignment} />
           <p className="resultViewer__dataNumber">
             {alignment === "question" ? "Question No." : "Solution No."}{" "}
-            {currQuestionNumber + 1}
+            {currQuestionNumber ? currQuestionNumber + 1 : "1"}
           </p>
         </div>
         <p>Paste selected text below</p>
