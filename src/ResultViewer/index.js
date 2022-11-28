@@ -260,6 +260,7 @@ function ResultViewer({
     console.log(orderFile, "orderFile");
     let imgURLListToSend = figsList.map((fig) => fig.data);
     let solutionimgURLListToSend = solutionFigsList.map((fig) => fig.data);
+
     const record = {
       text: text.question,
       image: imgURLListToSend,
