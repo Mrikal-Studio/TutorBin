@@ -402,7 +402,7 @@ function ResultViewer({
           <ToggleTab alignment={alignment} setAlignment={setAlignment} />
           <p className="resultViewer__dataNumber">
             {alignment === "question" ? "Question No." : "Solution No."}{" "}
-            {currQuestionNumber + 1}
+            {currQuestionNumber ? currQuestionNumber + 1 : "1"}
           </p>
         </div>
         <p>Paste selected text below</p>
