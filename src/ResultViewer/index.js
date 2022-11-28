@@ -96,6 +96,7 @@ function ResultViewer({
     let formData = new FormData();
     formData.append("file", OCRImage);
     setSavingOCROutputData(true);
+    console.log(alignment, "alignment");
     axios
       .post(BASE_URL + "output/photo-url", formData, {
         headers: {
@@ -105,6 +106,7 @@ function ResultViewer({
       .then((res) => {
         setSavingOCROutputData(false);
         if (alignment === "question") {
+          console.log(figsList, "figsList");
           setFigsList([
             ...figsList,
             {
@@ -201,6 +203,7 @@ function ResultViewer({
     });
     setPreviewImage(null);
     setOCRImage(null);
+    setFigsList([]);
     setSolutionsFigList([]);
   };
   const handleSaveQuestionData = () => {
@@ -350,10 +353,14 @@ function ResultViewer({
       deadline: savedQuestionsData[currQuestionNumber + 1]?.deadline || "",
       lastQuestion: savedQuestionsData[currQuestionNumber + 1]?.lastQuestion,
     });
-    setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image);
-    setSolutionsFigList(
-      savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
-    );
+    savedQuestionsData[currQuestionNumber + 1]?.image
+      ? setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image)
+      : setFigsList([]);
+    savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
+      ? setSolutionsFigList(
+          savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
+        )
+      : setSolutionsFigList([]);
   };
 
   const handleText = (e) => {
