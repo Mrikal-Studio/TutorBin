@@ -113,14 +113,22 @@ function ChooseFiles({
       setSelectedFile(files?.questions[0]?._id);
       setSelectedFileData(files?.questions[0]);
     } else {
-      if (!files?.tasks[0]?.assigned[0]?.solutions) return;
-      let format = files?.tasks[0]?.assigned[0]?.solutions[0]?.fileName
-        ?.split(".")
-        .pop();
+      if (
+        !files?.tasks[0]?.assigned.some((data) =>
+          data.hasOwnProperty("solutions")
+        )
+      )
+        return;
+      let solutionList = [
+        ...files?.tasks[0]?.assigned?.map((data) => data?.solutions),
+      ].flat();
+
+      console.log(solutionList, "solutionList");
+      let format = solutionList[0]?.fileName?.split(".").pop();
       if (!supportedFiles?.includes(format)) {
         handleDialogOpen();
       }
-      handleFile(files?.tasks[0]?.assigned[0]?.solutions[0]);
+      handleFile(solutionList[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [alignment, files]);
@@ -165,32 +173,36 @@ function ChooseFiles({
                 handleDialogOpen={handleDialogOpen}
               />
             ))
-          : files?.tasks[0]?.assigned[0]?.solutions
-          ? files?.tasks[0]?.assigned[0]?.solutions?.map((file) =>
-              !file?.isDeleted ? (
-                <span
-                  disabled
-                  className="file"
-                  id="solution_file"
-                  key={file._id}
-                  onClick={() => {
-                    let format = file?.fileName.split(".").pop();
-                    if (!supportedFiles?.includes(format)) {
-                      handleDialogOpen();
-                    }
-                    handleFile(file);
-                  }}
-                  style={{
-                    border: "1.2px solid #1C84FF",
-                    background:
-                      selectedFile === file?._id ? "#00A5E4" : "white",
-                    color: selectedFile === file?._id ? "white" : "#00A5E4",
-                  }}
-                >
-                  {file.fileName}
-                </span>
-              ) : null
+          : files?.tasks[0]?.assigned.some((data) =>
+              data.hasOwnProperty("solutions")
             )
+          ? [...files?.tasks[0]?.assigned?.map((data) => data?.solutions)]
+              .flat()
+              .map((file) =>
+                !file?.isDeleted ? (
+                  <span
+                    disabled
+                    className="file"
+                    id="solution_file"
+                    key={file._id}
+                    onClick={() => {
+                      let format = file?.fileName.split(".").pop();
+                      if (!supportedFiles?.includes(format)) {
+                        handleDialogOpen();
+                      }
+                      handleFile(file);
+                    }}
+                    style={{
+                      border: "1.2px solid #1C84FF",
+                      background:
+                        selectedFile === file?._id ? "#00A5E4" : "white",
+                      color: selectedFile === file?._id ? "white" : "#00A5E4",
+                    }}
+                  >
+                    {file.fileName}
+                  </span>
+                ) : null
+              )
           : null}
       </div>
     </>

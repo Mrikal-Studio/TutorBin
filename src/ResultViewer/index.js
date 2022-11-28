@@ -10,6 +10,7 @@ import { Stack } from "@mui/system";
 import FigModal from "./FigModal";
 import SelectOptions from "./SelectOptions";
 import ToggleTab from "./ToggleTab";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 function ResultViewer({
   orderFile,
@@ -62,6 +63,15 @@ function ResultViewer({
     setFigModalOpen(false);
   };
 
+  const handleFigListClose = (id) => {
+    setFigsList((prevState) => prevState.filter((item) => item.id !== id));
+  };
+
+  const handlesolutionFigListClose = (id) => {
+    setSolutionsFigList((prevState) =>
+      prevState.filter((item) => item.id !== id)
+    );
+  };
   const onSaveFig = () => {};
 
   const handleSnackClose = (event, reason) => {
@@ -84,6 +94,32 @@ function ResultViewer({
       })
       .then((res) => {
         setOCROutputData(res.data.data);
+        alignment === "question"
+          ? setText({ ...text, question: res.data.data })
+          : setText({ ...text, solution: res.data.data });
+        setLoadingOCRData(false);
+        setOpen(false);
+      })
+      .catch((err) => {
+        setLoadingOCRData(false);
+        console.log(err);
+      });
+  };
+
+  const getOCRToText = (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    axios
+      .post(BASE_URL + "output/text/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        setOCROutputData(res.data.data);
+        alignment === "question"
+          ? setText({ ...text, question: res.data.data })
+          : setText({ ...text, solution: res.data.data });
         setLoadingOCRData(false);
       })
       .catch((err) => {
@@ -114,6 +150,7 @@ function ResultViewer({
               file: OCRImage,
               imageURI: URL.createObjectURL(OCRImage),
               questionType: 0,
+              data: res.data.data,
             },
           ]);
         } else {
@@ -124,12 +161,13 @@ function ResultViewer({
               file: OCRImage,
               imageURI: URL.createObjectURL(OCRImage),
               questionType: 0,
+              data: res.data.data,
             },
           ]);
         }
-        alignment === "question"
-          ? setImgURLList([...imgURLList, res.data.data])
-          : setSolutionImgUrlList([...solutionimgURLList, res.data.data]);
+        // alignment === "question"
+        //   ? setImgURLList([...imgURLList, res.data.data])
+        //   : setSolutionImgUrlList([...solutionimgURLList, res.data.data]);
         setSnackOpen(true);
         setOpen(false);
         setOCROutputData("");
@@ -138,7 +176,14 @@ function ResultViewer({
         setSavingOCROutputData(false);
         console.log(err);
       });
+    console.log(figsList, "yyy");
   };
+
+  // const filterImageList = () => {
+  //   figsList.map((item) => {
+  //     return item.data;
+  //   });
+  // };
 
   function getSavedQuestionData() {
     if (orderFile.incrementalId)
@@ -182,10 +227,15 @@ function ResultViewer({
     const fileInput = document.getElementById("document_attachment_doc");
 
     window.addEventListener("paste", (e) => {
+      console.log(e.target, "on paste windows");
       fileInput.files = e.clipboardData.files;
       setPreviewImage(URL.createObjectURL(e.clipboardData.files[0]));
       setOCRImage(e.clipboardData.files[0]);
-      handleOpen();
+      if (e.target.id === "textOCR") {
+        getOCRToText(e.clipboardData.files[0]);
+      } else {
+        handleOpen();
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -207,9 +257,13 @@ function ResultViewer({
     setSolutionsFigList([]);
   };
   const handleSaveQuestionData = () => {
+    console.log(orderFile, "orderFile");
+    let imgURLListToSend = figsList.map((fig) => fig.data);
+    let solutionimgURLListToSend = solutionFigsList.map((fig) => fig.data);
+
     const record = {
       text: text.question,
-      image: imgURLList,
+      image: imgURLListToSend,
       type: selectedOptions.type,
       category: selectedOptions.category,
       instruction: selectedOptions.instruction,
@@ -223,7 +277,7 @@ function ResultViewer({
         : 1,
       solutions: {
         text: text.solution,
-        images: solutionimgURLList,
+        images: solutionimgURLListToSend,
         fileUrl: "",
       },
       fileUrl: selectedFileData?.fileUrl,
@@ -369,6 +423,10 @@ function ResultViewer({
     }
   };
 
+  const handleAddOCRText = (e) => {
+    console.log(e.target.id, "imageeee");
+  };
+
   return (
     <div className="resultViewer">
       <Snackbar
@@ -414,12 +472,13 @@ function ResultViewer({
 
         {alignment === "question" ? (
           <textarea
-            id="text"
+            id="textOCR"
             name="text"
             value={text?.question}
             className="questionContainer__review"
             placeholder="You can paste here and view your text..."
             onChange={(e) => handleText(e)}
+            onPaste={(e) => handleAddOCRText(e)}
           ></textarea>
         ) : (
           <textarea
@@ -436,24 +495,52 @@ function ResultViewer({
         <div className="resultViewer__figsList">
           {alignment === "question"
             ? figsList?.map((fig) => (
-                <Stack spacing={1} alignItems="center">
-                  <PermMediaIcon
-                    key={fig.id}
-                    className="resultViewer__figsIcon"
-                    onClick={() => handleFigModalOpen(fig)}
-                  />
-                  <p>Fig {fig.id}</p>
-                </Stack>
+                <div className="figsList">
+                  <Stack spacing={1} alignItems="center">
+                    {currQuestionNumber === savedQuestionsData.length - 1 ? (
+                      <div className="figsListClose">
+                        <CancelIcon
+                          className="figsList_closeIcon"
+                          onClick={() => handleFigListClose(fig.id)}
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+
+                    <div>
+                      <PermMediaIcon
+                        key={fig.id}
+                        className="resultViewer__figsIcon"
+                        onClick={() => handleFigModalOpen(fig)}
+                      />
+                    </div>
+                    <p>Fig {fig.id}</p>
+                  </Stack>
+                </div>
               ))
             : solutionFigsList?.map((fig) => (
-                <Stack spacing={1} alignItems="center">
-                  <PermMediaIcon
-                    key={fig.id}
-                    className="resultViewer__figsIcon"
-                    onClick={() => handleFigModalOpen(fig)}
-                  />
-                  <p>Fig {fig.id}</p>
-                </Stack>
+                <div>
+                  <Stack spacing={1} alignItems="center">
+                    {currQuestionNumber === savedQuestionsData.length - 1 ? (
+                      <div className="figsListClose">
+                        <CancelIcon
+                          className="figsList_closeIcon"
+                          onClick={() => handlesolutionFigListClose(fig.id)}
+                        />
+                      </div>
+                    ) : (
+                      ""
+                    )}
+
+                    <PermMediaIcon
+                      key={fig.id}
+                      className="resultViewer__figsIcon"
+                      onClick={() => handleFigModalOpen(fig)}
+                    />
+                    <p>Fig {fig.id}</p>
+                  </Stack>
+                </div>
               ))}
         </div>
         <Stack spacing={0}>
