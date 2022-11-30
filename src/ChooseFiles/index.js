@@ -111,6 +111,7 @@ function ChooseFiles({
     if (alignment === "question") {
       if (!files?.questions) return;
       setSelectedFile(files?.questions[0]?._id);
+      localStorage.setItem("incrementalId", files?.questions[0]?.incrementalId);
       setSelectedFileData(files?.questions[0]);
     } else {
       if (

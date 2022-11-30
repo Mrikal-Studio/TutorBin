@@ -17,7 +17,10 @@ function ResultViewer({
   selectedFileData,
   alignment,
   setAlignment,
+  index,
 }) {
+  console.log("selectedFileData", selectedFileData);
+  console.log("orderFile", orderFile);
   const [open, setOpen] = useState(false);
   const [figModalOpen, setFigModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
@@ -50,7 +53,6 @@ function ResultViewer({
   const [solutionimgURLList, setSolutionImgUrlList] = useState([]);
   const [priceModelData, setPriceModelData] = useState({});
   const [errors, setErrors] = useState({});
-  const [solErr, setSolErr] = useState({});
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -321,7 +323,6 @@ function ResultViewer({
       },
       fileUrl: selectedFileData?.fileUrl,
     };
-
     setSavingQuestionData(true);
     axios
       .post(BASE_URL + "question-meta-data", record)
@@ -552,15 +553,6 @@ function ResultViewer({
               placeholder="You can paste here and view your text..."
               onChange={(e) => handleText(e)}
             ></textarea>
-            {currQuestionNumber === savedQuestionsData.length - 1 ? (
-              <div>
-                {errors.solution ? (
-                  <Alert sx={{ width: "fit-content" }} severity="error">
-                    {errors.solution}
-                  </Alert>
-                ) : null}
-              </div>
-            ) : null}
           </div>
         )}
 
@@ -625,15 +617,6 @@ function ResultViewer({
             id={"document_attachment_doc"}
             className="custom__input"
           />
-          {currQuestionNumber === savedQuestionsData.length - 1 ? (
-            <div>
-              {errors.imgURLListToSend ? (
-                <Alert sx={{ width: "fit-content" }} severity="error">
-                  {errors.imgURLListToSend}
-                </Alert>
-              ) : null}
-            </div>
-          ) : null}
         </Stack>
         {alignment === "question" ? (
           <SelectOptions
