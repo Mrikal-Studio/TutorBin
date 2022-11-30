@@ -342,7 +342,7 @@ function ResultViewer({
         }
 
         setSavedQuestionsData([...temp_arr, x]);
-
+        setErrors("");
         setCurentQuestionData(x);
         setText({ ...text, question: "" });
         setCurrentQuestionNumber(currQuestionNumber + 1);
@@ -360,6 +360,8 @@ function ResultViewer({
         console.log(err);
       });
   };
+
+  //
 
   const getPriceModelData = () => {
     axios
