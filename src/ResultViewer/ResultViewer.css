@@ -142,3 +142,9 @@
   align-items: center;
   margin-bottom: 2rem;
 }
+.warning {
+  border: 2px solid #d32f2f;
+}
+.do-not-save {
+  background-color: gray;
+}

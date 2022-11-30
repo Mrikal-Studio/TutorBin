@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ResultViewer.css";
-import { Button, Card, Snackbar } from "@mui/material";
+import { Button, Card, Fade, Snackbar } from "@mui/material";
 import Alert from "@mui/material/Alert";
 import PreviewModal from "./PreviewModal";
 import axios from "axios";
@@ -49,6 +49,8 @@ function ResultViewer({
   const [imgURLList, setImgURLList] = useState([]);
   const [solutionimgURLList, setSolutionImgUrlList] = useState([]);
   const [priceModelData, setPriceModelData] = useState({});
+  const [errors, setErrors] = useState({});
+  const [solErr, setSolErr] = useState({});
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -256,11 +258,48 @@ function ResultViewer({
     setFigsList([]);
     setSolutionsFigList([]);
   };
+
+  // will return true if no errors
+  const validateRecords = () => {
+    let imgURLListToSend = figsList.map((fig) => fig.data);
+
+    const errors = {};
+    if (text.question?.length < 1) {
+      errors.question = "Text is required";
+    }
+    if (selectedOptions?.type.length === 0) {
+      errors.selectedOptionsType = "Type is required";
+    }
+    if (selectedOptions?.difficulty.length === 0) {
+      errors.selectedOptionDifficulty = "Difficulty is required";
+    }
+    if (selectedOptions?.category.length === 0) {
+      errors.selectedOptionCategory = "Category is required";
+    }
+    if (selectedOptions?.instruction.length < 1) {
+      errors.selectedOptionsInstruction = "Instructions are required";
+    }
+    if (selectedOptions?.deadline.length < 5) {
+      errors.selectedOptionsDeadline = "Deadline is required";
+    }
+    if (imgURLListToSend.length === 0) {
+      errors.imgURLListToSend = "At least one image should be selected";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return true;
+    }
+  };
+
   const handleSaveQuestionData = () => {
     console.log(orderFile, "orderFile");
     let imgURLListToSend = figsList.map((fig) => fig.data);
     let solutionimgURLListToSend = solutionFigsList.map((fig) => fig.data);
-
+    if (validateRecords()) {
+      console.log("acbsdjhvbdfhjbvdjhfvbdhjfbvdHello");
+      return;
+    }
     const record = {
       text: text.question,
       image: imgURLListToSend,
@@ -471,24 +510,56 @@ function ResultViewer({
         <p>Paste selected text below</p>
 
         {alignment === "question" ? (
-          <textarea
-            id="textOCR"
-            name="text"
-            value={text?.question}
-            className="questionContainer__review"
-            placeholder="You can paste here and view your text..."
-            onChange={(e) => handleText(e)}
-            onPaste={(e) => handleAddOCRText(e)}
-          ></textarea>
+          <div>
+            <textarea
+              id="textOCR"
+              name="text"
+              value={text?.question}
+              className={
+                currQuestionNumber === savedQuestionsData.length - 1 &&
+                errors.question
+                  ? "questionContainer__review warning"
+                  : "questionContainer__review"
+              }
+              placeholder="You can paste here and view your text..."
+              onChange={(e) => handleText(e)}
+              onPaste={(e) => handleAddOCRText(e)}
+            ></textarea>
+            {currQuestionNumber === savedQuestionsData.length - 1 ? (
+              <div>
+                {errors.question ? (
+                  <Alert sx={{ width: "fit-content" }} severity="error">
+                    {errors.question}
+                  </Alert>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
         ) : (
-          <textarea
-            id="text"
-            name="text"
-            value={text?.solution}
-            className="questionContainer__review"
-            placeholder="You can paste here and view your text..."
-            onChange={(e) => handleText(e)}
-          ></textarea>
+          <div>
+            <textarea
+              id="text"
+              name="text"
+              value={text?.solution}
+              className={
+                currQuestionNumber === savedQuestionsData.length - 1 &&
+                errors.solution
+                  ? "questionContainer__review warning"
+                  : "questionContainer__review "
+              }
+              placeholder="You can paste here and view your text..."
+              onChange={(e) => handleText(e)}
+            ></textarea>
+            {currQuestionNumber === savedQuestionsData.length - 1 ? (
+              <div>
+                {errors.solution ? (
+                  <Alert sx={{ width: "fit-content" }} severity="error">
+                    {errors.solution}
+                  </Alert>
+                ) : null}
+              </div>
+            ) : null}
+          </div>
         )}
 
         {/* <PriceModel priceModelData={setPriceModelData} /> */}
@@ -552,14 +623,27 @@ function ResultViewer({
             id={"document_attachment_doc"}
             className="custom__input"
           />
+          {currQuestionNumber === savedQuestionsData.length - 1 ? (
+            <div>
+              {errors.imgURLListToSend ? (
+                <Alert sx={{ width: "fit-content" }} severity="error">
+                  {errors.imgURLListToSend}
+                </Alert>
+              ) : null}
+            </div>
+          ) : null}
         </Stack>
         {alignment === "question" ? (
           <SelectOptions
             selectedOptions={selectedOptions}
             setSelectedOptions={setSelectedOptions}
             priceModelData={priceModelData}
+            errors={errors}
+            currQuestionNumber={currQuestionNumber}
+            savedQuestionsData={savedQuestionsData}
           />
         ) : null}
+
         <Stack
           spacing={2}
           direction="row"
@@ -576,7 +660,7 @@ function ResultViewer({
           ) : null}
           <Button
             variant="contained"
-            className="resultViewer__save"
+            className={"resultViewer__save"}
             onClick={handleSaveQuestionData}
           >
             {savingQuestionData ? "Saving..." : "Save"}
