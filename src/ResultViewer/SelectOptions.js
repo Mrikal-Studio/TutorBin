@@ -17,13 +17,7 @@ import {
   InputLabel,
 } from "@mui/material";
 
-function SelectOptions({
-  setSelectedOptions,
-  selectedOptions,
-  errors,
-  currQuestionNumber,
-  savedQuestionsData,
-}) {
+function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
   const handleTypeChange = (e) => {
     setSelectedOptions({ ...selectedOptions, type: e.target.value });
   };
@@ -42,7 +36,6 @@ function SelectOptions({
             <Select
               label="Type"
               className={
-                currQuestionNumber === savedQuestionsData.length - 1 &&
                 errors.selectedOptionsType
                   ? "selectOptions__dropdown warning"
                   : "selectOptions__dropdown"
@@ -58,17 +51,13 @@ function SelectOptions({
                 </MenuItem>
               ))}
             </Select>
-            {currQuestionNumber === savedQuestionsData.length - 1 ? (
-              <div>
-                {errors.selectedOptionsType ? (
-                  <Alert
-                    sx={{ marginTop: "0.5rem", width: "fit-content" }}
-                    severity="error"
-                  >
-                    {errors.selectedOptionsType}
-                  </Alert>
-                ) : null}
-              </div>
+            {errors.selectedOptionsType ? (
+              <Alert
+                sx={{ marginTop: "0.5rem", width: "fit-content" }}
+                severity="error"
+              >
+                {errors.selectedOptionsType}
+              </Alert>
             ) : null}
           </FormControl>
         </Grid>
@@ -78,7 +67,6 @@ function SelectOptions({
             <Select
               label="Difficulty"
               className={
-                currQuestionNumber === savedQuestionsData.length - 1 &&
                 errors.selectedOptionDifficulty
                   ? "selectOptions__dropdown warning"
                   : "selectOptions__dropdown"
@@ -93,17 +81,13 @@ function SelectOptions({
                 </MenuItem>
               ))}
             </Select>
-            {currQuestionNumber === savedQuestionsData.length - 1 ? (
-              <div>
-                {errors.selectedOptionDifficulty ? (
-                  <Alert
-                    sx={{ marginTop: "0.5rem", width: "fit-content" }}
-                    severity="error"
-                  >
-                    {errors.selectedOptionDifficulty}
-                  </Alert>
-                ) : null}
-              </div>
+            {errors.selectedOptionDifficulty ? (
+              <Alert
+                sx={{ marginTop: "0.5rem", width: "fit-content" }}
+                severity="error"
+              >
+                {errors.selectedOptionDifficulty}
+              </Alert>
             ) : null}
           </FormControl>
         </Grid>
@@ -114,7 +98,6 @@ function SelectOptions({
               required
               label="Category"
               className={
-                currQuestionNumber === savedQuestionsData.length - 1 &&
                 errors.selectedOptionCategory
                   ? "selectOptions__dropdown warning"
                   : "selectOptions__dropdown"
@@ -129,17 +112,13 @@ function SelectOptions({
                 </MenuItem>
               ))}
             </Select>
-            {currQuestionNumber === savedQuestionsData.length - 1 ? (
-              <div>
-                {errors.selectedOptionCategory ? (
-                  <Alert
-                    sx={{ marginTop: "0.5rem", width: "fit-content" }}
-                    severity="error"
-                  >
-                    {errors.selectedOptionCategory}
-                  </Alert>
-                ) : null}
-              </div>
+            {errors.selectedOptionCategory ? (
+              <Alert
+                sx={{ marginTop: "0.5rem", width: "fit-content" }}
+                severity="error"
+              >
+                {errors.selectedOptionCategory}
+              </Alert>
             ) : null}
           </FormControl>
         </Grid>
@@ -150,7 +129,6 @@ function SelectOptions({
             id="text"
             name="text"
             className={
-              currQuestionNumber === savedQuestionsData.length - 1 &&
               errors.selectedOptionsInstruction
                 ? "questionContainer__review warning"
                 : "questionContainer__review"
@@ -165,17 +143,14 @@ function SelectOptions({
               })
             }
           ></textarea>
-          {currQuestionNumber === savedQuestionsData.length - 1 ? (
-            <div>
-              {errors.selectedOptionsInstruction ? (
-                <Alert
-                  sx={{ marginTop: "0.5rem", width: "fit-content" }}
-                  severity="error"
-                >
-                  {errors.selectedOptionsInstruction}
-                </Alert>
-              ) : null}
-            </div>
+
+          {errors.selectedOptionsInstruction ? (
+            <Alert
+              sx={{ marginTop: "0.5rem", width: "fit-content" }}
+              severity="error"
+            >
+              {errors.selectedOptionsInstruction}
+            </Alert>
           ) : null}
         </Grid>
         <Grid item xs={12}>
@@ -187,7 +162,6 @@ function SelectOptions({
             name="deadline"
             min="2022-09-01"
             className={
-              currQuestionNumber === savedQuestionsData.length - 1 &&
               errors.selectedOptionsDeadline
                 ? "selectOptions__date warning"
                 : "selectOptions__date"
@@ -204,17 +178,13 @@ function SelectOptions({
               })
             }
           />
-          {currQuestionNumber === savedQuestionsData.length - 1 ? (
-            <div>
-              {errors.selectedOptionsDeadline ? (
-                <Alert
-                  sx={{ marginTop: "0.5rem", width: "fit-content" }}
-                  severity="error"
-                >
-                  {errors.selectedOptionsDeadline}
-                </Alert>
-              ) : null}
-            </div>
+          {errors.selectedOptionsDeadline ? (
+            <Alert
+              sx={{ marginTop: "0.5rem", width: "fit-content" }}
+              severity="error"
+            >
+              {errors.selectedOptionsDeadline}
+            </Alert>
           ) : null}
         </Grid>
         <Grid item xs={12}>
