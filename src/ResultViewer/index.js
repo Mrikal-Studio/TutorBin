@@ -500,7 +500,7 @@ function ResultViewer({
       >
         <Alert
           onClose={handleNoSolutionClose}
-          severity="success"
+          severity="warning"
           sx={{ width: "100%" }}
         >
           Question for this solution does not exist...Please fill up the
