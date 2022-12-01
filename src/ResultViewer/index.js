@@ -315,7 +315,10 @@ function ResultViewer({
     console.log(orderFile, "orderFile");
     let imgURLListToSend = figsList?.map((fig) => fig?.data);
     let solutionimgURLListToSend = solutionFigsList?.map((fig) => fig?.data);
-    console.log(alignment === "solution" && questionLength < currQuestionNumber + 1, "total")
+    console.log(
+      alignment === "solution" && questionLength < currQuestionNumber + 1,
+      "total"
+    );
     if (alignment === "solution" && questionLength < currQuestionNumber + 1) {
       setNoSolutionNotify(true);
       return;
@@ -369,6 +372,7 @@ function ResultViewer({
         setCurentQuestionData(x);
         setText({ ...text, question: "" });
         setCurrentQuestionNumber(currQuestionNumber + 1);
+        setQuestionLength(questionLength + 1);
         setSelectedOptions({
           type: "",
           difficulty: "",
