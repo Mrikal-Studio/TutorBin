@@ -275,7 +275,7 @@ function ResultViewer({
 
   // will return true if no errors
   const validateRecords = () => {
-    let imgURLListToSend = figsList.map((fig) => fig.data);
+    let imgURLListToSend = figsList?.map((fig) => fig?.data);
 
     if (currQuestionNumber !== savedQuestionsData.length - 1) {
       setErrors({});
@@ -313,8 +313,9 @@ function ResultViewer({
 
   const handleSaveQuestionData = () => {
     console.log(orderFile, "orderFile");
-    let imgURLListToSend = figsList.map((fig) => fig.data);
-    let solutionimgURLListToSend = solutionFigsList.map((fig) => fig.data);
+    let imgURLListToSend = figsList?.map((fig) => fig?.data);
+    let solutionimgURLListToSend = solutionFigsList?.map((fig) => fig?.data);
+    console.log(alignment === "solution" && questionLength < currQuestionNumber + 1, "total")
     if (alignment === "solution" && questionLength < currQuestionNumber + 1) {
       setNoSolutionNotify(true);
       return;
