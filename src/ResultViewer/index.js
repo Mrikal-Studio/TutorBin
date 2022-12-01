@@ -53,6 +53,8 @@ function ResultViewer({
   const [solutionimgURLList, setSolutionImgUrlList] = useState([]);
   const [priceModelData, setPriceModelData] = useState({});
   const [errors, setErrors] = useState({});
+  const [questionLength, setQuestionLength] = useState(null);
+  const [noSolutionNotify, setNoSolutionNotify] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -84,6 +86,13 @@ function ResultViewer({
     }
 
     setSnackOpen(false);
+  };
+  const handleNoSolutionClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setNoSolutionNotify(false);
   };
 
   const getOCRData = () => {
@@ -195,6 +204,7 @@ function ResultViewer({
         .get(BASE_URL + "question-meta-data/" + orderFile.incrementalId)
         .then((res) => {
           console.log(res, "response for question-meta");
+          setQuestionLength(res?.data?.data?.length);
           let x = res?.data?.data.sort(
             (a, b) => a.questionNumber - b.questionNumber
           );
@@ -221,6 +231,8 @@ function ResultViewer({
         })
         .catch((err) => console.log(err));
   }
+
+  console.log(questionLength, "questionLength");
 
   useEffect(() => {
     getSavedQuestionData();
@@ -265,23 +277,27 @@ function ResultViewer({
   const validateRecords = () => {
     let imgURLListToSend = figsList.map((fig) => fig.data);
 
+    if (currQuestionNumber !== savedQuestionsData.length - 1) {
+      setErrors({});
+      return false;
+    }
     const errors = {};
     if (text.question?.length < 1) {
       errors.question = "Text is required";
     }
-    if (selectedOptions?.type.length === 0) {
+    if ((selectedOptions?.type?.length || 0) === 0) {
       errors.selectedOptionsType = "Type is required";
     }
-    if (selectedOptions?.difficulty.length === 0) {
+    if ((selectedOptions?.difficulty?.length || 0) === 0) {
       errors.selectedOptionDifficulty = "Difficulty is required";
     }
-    if (selectedOptions?.category.length === 0) {
+    if ((selectedOptions?.category?.length || 0) === 0) {
       errors.selectedOptionCategory = "Category is required";
     }
-    if (selectedOptions?.instruction.length < 1) {
+    if ((selectedOptions?.instruction?.length || 0) < 1) {
       errors.selectedOptionsInstruction = "Instructions are required";
     }
-    if (selectedOptions?.deadline.length < 5) {
+    if ((selectedOptions?.deadline?.length || 0) < 5) {
       errors.selectedOptionsDeadline = "Deadline is required";
     }
     if (imgURLListToSend.length === 0) {
@@ -290,6 +306,7 @@ function ResultViewer({
 
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
+      console.log("errrrrrors", errors);
       return true;
     }
   };
@@ -298,7 +315,11 @@ function ResultViewer({
     console.log(orderFile, "orderFile");
     let imgURLListToSend = figsList.map((fig) => fig.data);
     let solutionimgURLListToSend = solutionFigsList.map((fig) => fig.data);
-    if (validateRecords()) {
+    if (alignment === "solution" && questionLength < currQuestionNumber + 1) {
+      setNoSolutionNotify(true);
+      return;
+    }
+    if (validateRecords() && alignment === "question") {
       console.log("acbsdjhvbdfhjbvdjhfvbdhjfbvdHello");
       return;
     }
@@ -312,7 +333,7 @@ function ResultViewer({
       deadline: selectedOptions.deadline,
       orderId: parseInt(orderFile?.incrementalId),
       incrementalId: parseInt(localStorage.getItem("incrementalId")),
-      subjectId: orderFile?.subject?.id,
+      subject: orderFile?.subject?.id,
       questionNumber: currQuestionData?.questionNumber
         ? currQuestionData?.questionNumber
         : 1,
@@ -343,7 +364,7 @@ function ResultViewer({
         }
 
         setSavedQuestionsData([...temp_arr, x]);
-        setErrors("");
+        setErrors({});
         setCurentQuestionData(x);
         setText({ ...text, question: "" });
         setCurrentQuestionNumber(currQuestionNumber + 1);
@@ -472,6 +493,21 @@ function ResultViewer({
   return (
     <div className="resultViewer">
       <Snackbar
+        open={noSolutionNotify}
+        autoHideDuration={6000}
+        onClose={handleNoSolutionClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleNoSolutionClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Question for this solution does not exist...Please fill up the
+          question first.
+        </Alert>
+      </Snackbar>
+      <Snackbar
         open={snackOpen}
         autoHideDuration={6000}
         onClose={handleSnackClose}
@@ -528,14 +564,10 @@ function ResultViewer({
               onChange={(e) => handleText(e)}
               onPaste={(e) => handleAddOCRText(e)}
             ></textarea>
-            {currQuestionNumber === savedQuestionsData.length - 1 ? (
-              <div>
-                {errors.question ? (
-                  <Alert sx={{ width: "fit-content" }} severity="error">
-                    {errors.question}
-                  </Alert>
-                ) : null}
-              </div>
+            {errors.question ? (
+              <Alert sx={{ width: "fit-content" }} severity="error">
+                {errors.question}
+              </Alert>
             ) : null}
           </div>
         ) : (
@@ -545,7 +577,6 @@ function ResultViewer({
               name="text"
               value={text?.solution}
               className={
-                currQuestionNumber === savedQuestionsData.length - 1 &&
                 errors.solution
                   ? "questionContainer__review warning"
                   : "questionContainer__review "
@@ -624,8 +655,6 @@ function ResultViewer({
             setSelectedOptions={setSelectedOptions}
             priceModelData={priceModelData}
             errors={errors}
-            currQuestionNumber={currQuestionNumber}
-            savedQuestionsData={savedQuestionsData}
           />
         ) : null}
 
