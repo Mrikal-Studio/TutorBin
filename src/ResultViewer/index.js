@@ -21,6 +21,7 @@ function ResultViewer({
 }) {
   console.log("selectedFileData", selectedFileData);
   console.log("orderFile", orderFile);
+
   const [open, setOpen] = useState(false);
   const [figModalOpen, setFigModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
@@ -55,6 +56,8 @@ function ResultViewer({
   const [errors, setErrors] = useState({});
   const [questionLength, setQuestionLength] = useState(null);
   const [noSolutionNotify, setNoSolutionNotify] = useState(false);
+
+  console.log(figsList, "figsList");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
