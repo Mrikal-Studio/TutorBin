@@ -121,7 +121,9 @@ function ChooseFiles({
       )
         return;
       let solutionList = [
-        ...files?.tasks[0]?.assigned?.map((data) => data?.solutions),
+        ...(files?.tasks?.map((task) =>
+          task?.assigned?.map((data) => data?.solutions || []).flat()
+        ) || []),
       ].flat();
 
       console.log(solutionList, "solutionList");
@@ -174,37 +176,23 @@ function ChooseFiles({
                 handleDialogOpen={handleDialogOpen}
               />
             ))
-          : files?.tasks[0]?.assigned.some((data) =>
-              data.hasOwnProperty("solutions")
-            )
-          ? [...files?.tasks[0]?.assigned?.map((data) => data?.solutions)]
+          : [
+              ...(files?.tasks?.map((task) =>
+                task?.assigned?.map((data) => data?.solutions || []).flat()
+              ) || []),
+            ]
               .flat()
               .map((file) =>
                 !file?.isDeleted ? (
-                  <span
-                    disabled
-                    className="file"
-                    id="solution_file"
+                  <FileTab
+                    selectedFile={selectedFile}
                     key={file._id}
-                    onClick={() => {
-                      let format = file?.fileName.split(".").pop();
-                      if (!supportedFiles?.includes(format)) {
-                        handleDialogOpen();
-                      }
-                      handleFile(file);
-                    }}
-                    style={{
-                      border: "1.2px solid #1C84FF",
-                      background:
-                        selectedFile === file?._id ? "#00A5E4" : "white",
-                      color: selectedFile === file?._id ? "white" : "#00A5E4",
-                    }}
-                  >
-                    {file.fileName}
-                  </span>
+                    handleFile={handleFile}
+                    file={file}
+                    handleDialogOpen={handleDialogOpen}
+                  />
                 ) : null
-              )
-          : null}
+              )}
       </div>
     </>
   );

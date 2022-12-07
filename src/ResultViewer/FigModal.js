@@ -1,7 +1,7 @@
 import { Modal } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import React from "react";
-
+import { IMAGE_URL } from "../api";
 const style = {
   position: "absolute",
   top: "50%",
@@ -19,8 +19,13 @@ function FigModal({ open, handleClose, selectedFig }) {
     <Modal open={open} onClose={handleClose}>
       <Box sx={style}>
         <Stack spacing={2}>
+          {console.log(IMAGE_URL + selectedFig, "figggggg")}
           <img
-            src={selectedFig?.imageURI ? selectedFig?.imageURI : selectedFig}
+            src={
+              selectedFig?.imageURI
+                ? selectedFig.imageURI
+                : IMAGE_URL + selectedFig
+            }
             alt="preview__image"
           />
         </Stack>
