@@ -337,6 +337,7 @@ function ResultViewer({
       category: selectedOptions.category,
       instruction: selectedOptions.instruction,
       lastQuestion: selectedOptions.lastQuestion,
+      difficulty: selectedOptions.difficulty,
       deadline: selectedOptions.deadline,
       orderId: parseInt(orderFile?.incrementalId),
       incrementalId: parseInt(localStorage.getItem("incrementalId")),
