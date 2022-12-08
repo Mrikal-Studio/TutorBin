@@ -337,6 +337,7 @@ function ResultViewer({
       category: selectedOptions.category,
       instruction: selectedOptions.instruction,
       lastQuestion: selectedOptions.lastQuestion,
+      difficulty: selectedOptions.difficulty,
       deadline: selectedOptions.deadline,
       orderId: parseInt(orderFile?.incrementalId),
       incrementalId: parseInt(localStorage.getItem("incrementalId")),
@@ -448,6 +449,7 @@ function ResultViewer({
     setSolutionsFigList(
       savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
     );
+    setErrors({});
   };
 
   const openNextQuestion = () => {
@@ -598,31 +600,34 @@ function ResultViewer({
         {/* <PriceModel priceModelData={setPriceModelData} /> */}
         <div className="resultViewer__figsList">
           {alignment === "question"
-            ? figsList?.map((fig) => (
-                <div className="figsList">
-                  <Stack spacing={1} alignItems="center">
-                    {currQuestionNumber === savedQuestionsData.length - 1 ? (
-                      <div className="figsListClose">
-                        <CancelIcon
-                          className="figsList_closeIcon"
-                          onClick={() => handleFigListClose(fig.id)}
+            ? figsList?.map((fig) => {
+                if (!fig) return null;
+                return (
+                  <div className="figsList">
+                    <Stack spacing={1} alignItems="center">
+                      {currQuestionNumber === savedQuestionsData.length - 1 ? (
+                        <div className="figsListClose">
+                          <CancelIcon
+                            className="figsList_closeIcon"
+                            onClick={() => handleFigListClose(fig.id)}
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
+
+                      <div>
+                        <PermMediaIcon
+                          key={fig.id}
+                          className="resultViewer__figsIcon"
+                          onClick={() => handleFigModalOpen(fig)}
                         />
                       </div>
-                    ) : (
-                      ""
-                    )}
-
-                    <div>
-                      <PermMediaIcon
-                        key={fig.id}
-                        className="resultViewer__figsIcon"
-                        onClick={() => handleFigModalOpen(fig)}
-                      />
-                    </div>
-                    <p>Fig {fig.id}</p>
-                  </Stack>
-                </div>
-              ))
+                      <p>Fig {fig.id}</p>
+                    </Stack>
+                  </div>
+                );
+              })
             : solutionFigsList?.map((fig) => (
                 <div>
                   <Stack spacing={1} alignItems="center">
