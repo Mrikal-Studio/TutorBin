@@ -628,29 +628,32 @@ function ResultViewer({
                   </div>
                 );
               })
-            : solutionFigsList?.map((fig) => (
-                <div>
-                  <Stack spacing={1} alignItems="center">
-                    {currQuestionNumber === savedQuestionsData.length - 1 ? (
-                      <div className="figsListClose">
-                        <CancelIcon
-                          className="figsList_closeIcon"
-                          onClick={() => handlesolutionFigListClose(fig.id)}
-                        />
-                      </div>
-                    ) : (
-                      ""
-                    )}
+            : solutionFigsList?.map((fig) => {
+                if (!fig) return null;
+                return (
+                  <div>
+                    <Stack spacing={1} alignItems="center">
+                      {currQuestionNumber === savedQuestionsData.length - 1 ? (
+                        <div className="figsListClose">
+                          <CancelIcon
+                            className="figsList_closeIcon"
+                            onClick={() => handlesolutionFigListClose(fig.id)}
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
 
-                    <PermMediaIcon
-                      key={fig.id}
-                      className="resultViewer__figsIcon"
-                      onClick={() => handleFigModalOpen(fig)}
-                    />
-                    <p>Fig {fig.id}</p>
-                  </Stack>
-                </div>
-              ))}
+                      <PermMediaIcon
+                        key={fig.id}
+                        className="resultViewer__figsIcon"
+                        onClick={() => handleFigModalOpen(fig)}
+                      />
+                      <p>Fig {fig.id}</p>
+                    </Stack>
+                  </div>
+                );
+              })}
         </div>
         <Stack spacing={0}>
           <label>Paste snipped image below</label>
