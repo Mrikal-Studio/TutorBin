@@ -10,6 +10,8 @@
     "@mui/x-date-pickers": "^5.0.7",
     "@pdftron/pdfjs-express-viewer": "^8.7.0",
     "@react-spring/web": "^9.5.5",
+    "@sentry/react": "^7.24.2",
+    "@sentry/tracing": "^7.24.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

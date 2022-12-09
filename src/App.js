@@ -4,6 +4,8 @@ import ChooseFiles from "./ChooseFiles";
 import Loader from ".././src/Loader/index";
 import PDFViewer from "./PDFViewer";
 import ResultViewer from "./ResultViewer";
+import * as Sentry from "@sentry/react";
+
 
 function App() {
   const [viewerInstance, setViewerInstance] = useState();
@@ -58,4 +60,4 @@ function App() {
   );
 }
 
-export default App;
+export default Sentry.withProfiler(App);
