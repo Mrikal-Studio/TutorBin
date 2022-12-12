@@ -56,7 +56,7 @@ function ResultViewer({
   const [errors, setErrors] = useState({});
   const [questionLength, setQuestionLength] = useState(null);
   const [noSolutionNotify, setNoSolutionNotify] = useState(false);
-
+  const [dataErr, setDataErr] = useState("");
   console.log(figsList, "figsList");
 
   const handleOpen = () => setOpen(true);
@@ -288,25 +288,12 @@ function ResultViewer({
     if (text.question?.length < 1) {
       errors.question = "Text is required";
     }
-    if ((selectedOptions?.type?.length || 0) === 0) {
-      errors.selectedOptionsType = "Type is required";
-    }
-    if ((selectedOptions?.difficulty?.length || 0) === 0) {
-      errors.selectedOptionDifficulty = "Difficulty is required";
-    }
     if ((selectedOptions?.category?.length || 0) === 0) {
       errors.selectedOptionCategory = "Category is required";
-    }
-    if ((selectedOptions?.instruction?.length || 0) < 1) {
-      errors.selectedOptionsInstruction = "Instructions are required";
-    }
-    if ((selectedOptions?.deadline?.length || 0) < 5) {
-      errors.selectedOptionsDeadline = "Deadline is required";
     }
     if (imgURLListToSend.length === 0) {
       errors.imgURLListToSend = "At least one image should be selected";
     }
-
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       console.log("errrrrrors", errors);
@@ -370,7 +357,6 @@ function ResultViewer({
           if (temp_arr[i].questionNumber === record.questionNumber)
             temp_arr[i] = record;
         }
-
         setSavedQuestionsData([...temp_arr, x]);
         setErrors({});
         setCurentQuestionData(x);
@@ -388,6 +374,7 @@ function ResultViewer({
       })
       .catch((err) => {
         setSavingQuestionData(false);
+        setDataErr("data does not exist");
         console.log(err);
       });
   };

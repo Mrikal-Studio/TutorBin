@@ -35,11 +35,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
             <InputLabel id="demo-simple-select-label">Type</InputLabel>
             <Select
               label="Type"
-              className={
-                errors.selectedOptionsType
-                  ? "selectOptions__dropdown warning"
-                  : "selectOptions__dropdown"
-              }
+              className="selectOptions__dropdown"
               onChange={handleTypeChange}
               value={selectedOptions?.type}
               disabled={selectedOptions?.dataFromPriceModel}
@@ -51,14 +47,6 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
                 </MenuItem>
               ))}
             </Select>
-            {errors.selectedOptionsType ? (
-              <Alert
-                sx={{ marginTop: "0.5rem", width: "fit-content" }}
-                severity="error"
-              >
-                {errors.selectedOptionsType}
-              </Alert>
-            ) : null}
           </FormControl>
         </Grid>
         <Grid item xs={6}>
@@ -66,11 +54,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
             <InputLabel id="demo-simple-select-label">Difficulty</InputLabel>
             <Select
               label="Difficulty"
-              className={
-                errors.selectedOptionDifficulty
-                  ? "selectOptions__dropdown warning"
-                  : "selectOptions__dropdown"
-              }
+              className="selectOptions__dropdown"
               onChange={handleDifficultyChange}
               value={selectedOptions?.difficulty}
               disabled={selectedOptions?.dataFromPriceModel}
@@ -81,14 +65,6 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
                 </MenuItem>
               ))}
             </Select>
-            {errors.selectedOptionDifficulty ? (
-              <Alert
-                sx={{ marginTop: "0.5rem", width: "fit-content" }}
-                severity="error"
-              >
-                {errors.selectedOptionDifficulty}
-              </Alert>
-            ) : null}
           </FormControl>
         </Grid>
         <Grid item xs={8}>
@@ -128,11 +104,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
             required
             id="text"
             name="text"
-            className={
-              errors.selectedOptionsInstruction
-                ? "questionContainer__review warning"
-                : "questionContainer__review"
-            }
+            className="questionContainer__review"
             placeholder="Please add instructions..."
             value={selectedOptions?.instruction}
             disabled={selectedOptions?.dataFromPriceModel}
@@ -143,15 +115,6 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
               })
             }
           ></textarea>
-
-          {errors.selectedOptionsInstruction ? (
-            <Alert
-              sx={{ marginTop: "0.5rem", width: "fit-content" }}
-              severity="error"
-            >
-              {errors.selectedOptionsInstruction}
-            </Alert>
-          ) : null}
         </Grid>
         <Grid item xs={12}>
           <InputLabel id="demo-simple-select-label">Deadline</InputLabel>
@@ -161,11 +124,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
             id="end"
             name="deadline"
             min="2022-09-01"
-            className={
-              errors.selectedOptionsDeadline
-                ? "selectOptions__date warning"
-                : "selectOptions__date"
-            }
+            className="selectOptions__date"
             value={
               selectedOptions
                 ? moment(selectedOptions?.deadline).format("YYYY-MM-DD")
@@ -178,14 +137,6 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
               })
             }
           />
-          {errors.selectedOptionsDeadline ? (
-            <Alert
-              sx={{ marginTop: "0.5rem", width: "fit-content" }}
-              severity="error"
-            >
-              {errors.selectedOptionsDeadline}
-            </Alert>
-          ) : null}
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel
