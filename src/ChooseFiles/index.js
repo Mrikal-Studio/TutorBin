@@ -1,3 +1,4 @@
+import { Alert, Snackbar, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../api";
@@ -18,6 +19,7 @@ function ChooseFiles({
 }) {
   const [selectedFile, setSelectedFile] = useState();
   const [searchOrder, setsearchOrder] = useState();
+  const [showNotFoundError, setShowNotFoundError] = useState(false);
   const [open, setOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -70,6 +72,7 @@ function ChooseFiles({
   };
 
   useEffect(() => {
+    setShowNotFoundError(false);
     axios
       .get(BASE_URL + `orders/?order_id=${searchOrder}`)
       .then((res) => {
@@ -97,7 +100,15 @@ function ChooseFiles({
         setSelectedFileData(res?.data?.data?.questions[0]);
         setsearchOrder();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (searchOrder != null && searchOrder.length !== 0) {
+          setShowNotFoundError(true);
+          window.setTimeout(() => {
+            setShowNotFoundError(false);
+          }, 5000);
+        }
+        console.error(err);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchOrder]);
 
@@ -153,6 +164,18 @@ function ChooseFiles({
         getFiles={getFiles}
         setsearchOrder={setsearchOrder}
       />
+      {showNotFoundError ? (
+        <Alert
+          severity="error"
+          sx={{ width: "fit-content", margin: "0 auto" }}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          No order found By this id !
+        </Alert>
+      ) : null}
       <UpdateOrderModal
         selectedOrderId={files?._id}
         subjectId={files?.subject?.id}
