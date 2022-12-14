@@ -288,12 +288,6 @@ function ResultViewer({
     if (text.question?.length < 1) {
       errors.question = "Text is required";
     }
-    if ((selectedOptions?.category?.length || 0) === 0) {
-      errors.selectedOptionCategory = "Category is required";
-    }
-    if (imgURLListToSend.length === 0) {
-      errors.imgURLListToSend = "At least one image should be selected";
-    }
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
       console.log("errrrrrors", errors);
