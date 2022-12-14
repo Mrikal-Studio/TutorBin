@@ -73,11 +73,7 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
             <Select
               required
               label="Category"
-              className={
-                errors.selectedOptionCategory
-                  ? "selectOptions__dropdown warning"
-                  : "selectOptions__dropdown"
-              }
+              className="selectOptions__dropdown"
               onChange={handleCategoryChange}
               value={selectedOptions?.category}
               disabled={selectedOptions?.dataFromPriceModel}
@@ -88,14 +84,6 @@ function SelectOptions({ setSelectedOptions, selectedOptions, errors }) {
                 </MenuItem>
               ))}
             </Select>
-            {errors.selectedOptionCategory ? (
-              <Alert
-                sx={{ marginTop: "0.5rem", width: "fit-content" }}
-                severity="error"
-              >
-                {errors.selectedOptionCategory}
-              </Alert>
-            ) : null}
           </FormControl>
         </Grid>
         <Grid item xs={12}>
