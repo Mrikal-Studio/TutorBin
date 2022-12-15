@@ -285,8 +285,9 @@ function ResultViewer({
       return false;
     }
     const errors = {};
-    if (text.question?.length < 1) {
-      errors.question = "Text is required";
+
+    if (text.question?.length < 1 && figsList.length === 0) {
+      errors.question = "One of the text or image field is required";
     }
     if (Object.keys(errors).length > 0) {
       setErrors(errors);
@@ -297,8 +298,20 @@ function ResultViewer({
 
   const handleSaveQuestionData = () => {
     console.log(orderFile, "orderFile");
-    let imgURLListToSend = figsList?.map((fig) => fig?.data);
-    let solutionimgURLListToSend = solutionFigsList?.map((fig) => fig?.data);
+    let imgURLListToSend = figsList?.map((fig) => {
+      if (typeof fig === "string") {
+        return fig;
+      }
+      return fig?.data;
+    });
+    // let imgURLListToSend = figsList?.map((fig) => fig?.data);
+    // let solutionimgURLListToSend = solutionFigsList?.map((fig) => fig?.data);
+    let solutionimgURLListToSend = solutionFigsList?.map((fig) => {
+      if (typeof fig === "string") {
+        return fig;
+      }
+      return fig?.data;
+    });
     console.log(
       alignment === "solution" && questionLength < currQuestionNumber + 1,
       "total"
@@ -311,6 +324,7 @@ function ResultViewer({
       console.log("acbsdjhvbdfhjbvdjhfvbdhjfbvdHello");
       return;
     }
+
     const record = {
       text: text.question,
       image: imgURLListToSend,
@@ -546,20 +560,15 @@ function ResultViewer({
               name="text"
               value={text?.question}
               className={
-                currQuestionNumber === savedQuestionsData.length - 1 &&
-                errors.question
-                  ? "questionContainer__review warning"
-                  : "questionContainer__review"
+                // currQuestionNumber === savedQuestionsData.length - 1 &&
+                // errors.question
+                //   ? "questionContainer__review warning" :
+                "questionContainer__review"
               }
               placeholder="You can paste here and view your text..."
               onChange={(e) => handleText(e)}
               onPaste={(e) => handleAddOCRText(e)}
             ></textarea>
-            {errors.question ? (
-              <Alert sx={{ width: "fit-content" }} severity="error">
-                {errors.question}
-              </Alert>
-            ) : null}
           </div>
         ) : (
           <div>
@@ -653,6 +662,12 @@ function ResultViewer({
             priceModelData={priceModelData}
             errors={errors}
           />
+        ) : null}
+
+        {errors.question ? (
+          <Alert sx={{ width: "fit-content" }} severity="error">
+            {errors.question}
+          </Alert>
         ) : null}
 
         <Stack
