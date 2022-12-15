@@ -297,6 +297,7 @@ function ResultViewer({
   };
 
   const handleSaveQuestionData = () => {
+    console.log(currQuestionNumber + 1, "question current");
     console.log(orderFile, "orderFile");
     let imgURLListToSend = figsList?.map((fig) => {
       if (typeof fig === "string") {
@@ -304,18 +305,16 @@ function ResultViewer({
       }
       return fig?.data;
     });
-    // let imgURLListToSend = figsList?.map((fig) => fig?.data);
-    // let solutionimgURLListToSend = solutionFigsList?.map((fig) => fig?.data);
+
     let solutionimgURLListToSend = solutionFigsList?.map((fig) => {
       if (typeof fig === "string") {
         return fig;
       }
       return fig?.data;
     });
-    console.log(
-      alignment === "solution" && questionLength < currQuestionNumber + 1,
-      "total"
-    );
+    // let imgURLListToSend = figsList?.map((fig) => fig?.data);
+    // let solutionimgURLListToSend = solutionFigsList?.map((fig) => fig?.data);
+
     if (alignment === "solution" && questionLength < currQuestionNumber + 1) {
       setNoSolutionNotify(true);
       return;
@@ -354,8 +353,8 @@ function ResultViewer({
         setSavingQuestionData(false);
         setSnackOpen(true);
         resetStateHandler();
-        let curr_qno = currQuestionData?.questionNumber + 1;
 
+        let curr_qno = currQuestionData?.questionNumber + 1;
         let x = {
           questionNumber: curr_qno,
         };
@@ -368,17 +367,9 @@ function ResultViewer({
         setSavedQuestionsData([...temp_arr, x]);
         setErrors({});
         setCurentQuestionData(x);
-        setText({ ...text, question: "" });
-        setCurrentQuestionNumber(currQuestionNumber + 1);
+        // setCurrentQuestionNumber(currQuestionNumber + 1);
         setQuestionLength(questionLength + 1);
-        setSelectedOptions({
-          type: "",
-          difficulty: "",
-          category: "",
-          instruction: "",
-          deadline: "",
-          lastQuestion: "",
-        });
+        openNextQuestion();
       })
       .catch((err) => {
         setSavingQuestionData(false);
@@ -386,8 +377,6 @@ function ResultViewer({
         console.log(err);
       });
   };
-
-  //
 
   const getPriceModelData = () => {
     axios
@@ -417,6 +406,7 @@ function ResultViewer({
   }, []);
 
   const openPrevQuestion = () => {
+    console.log(savedQuestionsData[currQuestionNumber - 1], "backkkk");
     // if (currQuestionNumber === 0) {
     //   return;
     // }
@@ -440,6 +430,10 @@ function ResultViewer({
       deadline: savedQuestionsData[currQuestionNumber - 1]?.deadline,
       lastQuestion: savedQuestionsData[currQuestionNumber - 1]?.lastQuestion,
     });
+    console.log(
+      "savedQuestionsData",
+      savedQuestionsData[currQuestionNumber - 1]
+    );
     setFigsList(savedQuestionsData[currQuestionNumber - 1]?.image);
     setSolutionsFigList(
       savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
@@ -448,6 +442,7 @@ function ResultViewer({
   };
 
   const openNextQuestion = () => {
+    console.log(currQuestionNumber, "open next");
     if (currQuestionNumber === savedQuestionsData.length - 1) {
       resetStateHandler();
       return;
@@ -476,9 +471,9 @@ function ResultViewer({
     savedQuestionsData[currQuestionNumber + 1]?.image
       ? setFigsList(savedQuestionsData[currQuestionNumber + 1]?.image)
       : setFigsList([]);
-    savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
+    savedQuestionsData[currQuestionNumber + 1]?.solutions?.images
       ? setSolutionsFigList(
-          savedQuestionsData[currQuestionNumber - 1]?.solutions?.images
+          savedQuestionsData[currQuestionNumber + 1]?.solutions?.images
         )
       : setSolutionsFigList([]);
   };
@@ -494,6 +489,11 @@ function ResultViewer({
   const handleAddOCRText = (e) => {
     console.log(e.target.id, "imageeee");
   };
+  console.log(
+    currQuestionNumber,
+    "current selected question",
+    savedQuestionsData[currQuestionNumber]
+  );
 
   return (
     <div className="resultViewer">
@@ -547,7 +547,7 @@ function ResultViewer({
         <div className="resultViewer__cardHeader">
           <ToggleTab alignment={alignment} setAlignment={setAlignment} />
           <p className="resultViewer__dataNumber">
-            {alignment === "question" ? "Question No." : "Solution No."}{" "}
+            {alignment === "question" ? "Question No." : "Solution No."}
             {currQuestionNumber ? currQuestionNumber + 1 : "1"}
           </p>
         </div>
