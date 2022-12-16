@@ -360,16 +360,30 @@ function ResultViewer({
         };
 
         let temp_arr = savedQuestionsData;
+        let already_saved_question = false;
         for (let i = 0; i < savedQuestionsData.length; i++) {
-          if (temp_arr[i].questionNumber === record.questionNumber)
+          if (temp_arr[i].questionNumber === record.questionNumber) {
             temp_arr[i] = record;
+            already_saved_question = true;
+          }
         }
-        setSavedQuestionsData([...temp_arr, x]);
+        if (already_saved_question) setSavedQuestionsData([...temp_arr]);
+        else setSavedQuestionsData([...temp_arr, x]);
         setErrors({});
-        setCurentQuestionData(x);
-        // setCurrentQuestionNumber(currQuestionNumber + 1);
+        // setCurentQuestionData(x);
+        setCurrentQuestionNumber(currQuestionNumber + 1);
+        console.log("question length", questionLength + 1);
         setQuestionLength(questionLength + 1);
-        openNextQuestion();
+        console.log("savee", savedQuestionsData.length, curr_qno);
+        if (savedQuestionsData.length !== curr_qno - 1) {
+          console.log("saveee going to next question");
+          openNextQuestion();
+        } else {
+          console.log("saveee resetting");
+          setCurrentQuestionNumber(currQuestionNumber + 1);
+          setCurentQuestionData(x);
+          resetStateHandler();
+        }
       })
       .catch((err) => {
         setSavingQuestionData(false);
@@ -406,10 +420,11 @@ function ResultViewer({
   }, []);
 
   const openPrevQuestion = () => {
-    console.log(savedQuestionsData[currQuestionNumber - 1], "backkkk");
+    console.log(currQuestionNumber, "backkkk");
     // if (currQuestionNumber === 0) {
     //   return;
     // }
+
     setCurentQuestionData(savedQuestionsData[currQuestionNumber - 1]);
 
     setCurrentQuestionNumber(currQuestionNumber - 1);
@@ -440,12 +455,23 @@ function ResultViewer({
     );
     setErrors({});
   };
+  console.log(
+    "openNextQuestion  currentQuestionNumber:",
+    currQuestionNumber + 1
+  );
 
   const openNextQuestion = () => {
-    console.log(currQuestionNumber, "open next");
-    if (currQuestionNumber === savedQuestionsData.length - 1) {
+    console.log(
+      "openNextQuestion ",
+      currQuestionNumber + 1,
+      savedQuestionsData.length,
+      savedQuestionsData[savedQuestionsData.length - 1]
+    );
+    if (currQuestionNumber >= savedQuestionsData.length - 1) {
       resetStateHandler();
       return;
+    } else {
+      setCurrentQuestionNumber(currQuestionNumber + 1);
     }
     setCurentQuestionData(savedQuestionsData[currQuestionNumber + 1]);
     setText({
@@ -458,7 +484,6 @@ function ResultViewer({
         : "",
     });
 
-    setCurrentQuestionNumber(currQuestionNumber + 1);
     setSelectedOptions({
       type: savedQuestionsData[currQuestionNumber + 1]?.type,
       difficulty: savedQuestionsData[currQuestionNumber + 1]?.difficulty,
