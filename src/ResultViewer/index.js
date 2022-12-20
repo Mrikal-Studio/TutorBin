@@ -360,15 +360,18 @@ function ResultViewer({
         };
 
         let temp_arr = savedQuestionsData;
-        let already_saved_question = false;
+        const already_saved_question =
+          currQuestionNumber !== savedQuestionsData.length - 1;
         for (let i = 0; i < savedQuestionsData.length; i++) {
           if (temp_arr[i].questionNumber === record.questionNumber) {
             temp_arr[i] = record;
-            already_saved_question = true;
           }
         }
-        if (already_saved_question) setSavedQuestionsData([...temp_arr]);
-        else setSavedQuestionsData([...temp_arr, x]);
+        if (already_saved_question) {
+          setSavedQuestionsData([...temp_arr]);
+        } else {
+          setSavedQuestionsData([...temp_arr, x]);
+        }
         setErrors({});
         // setCurentQuestionData(x);
         setCurrentQuestionNumber(currQuestionNumber + 1);
