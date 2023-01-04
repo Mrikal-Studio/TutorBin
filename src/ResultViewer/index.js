@@ -208,6 +208,7 @@ function ResultViewer({
         .then((res) => {
           console.log(res, "response for question-meta");
           setQuestionLength(res?.data?.data?.length);
+          res.data.data = res.data.data.filter(item => item.incrementalId == selectedFileData.incrementalId)
           let x = res?.data?.data.sort(
             (a, b) => a.questionNumber - b.questionNumber
           );
